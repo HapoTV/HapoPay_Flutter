@@ -147,3 +147,41 @@ flutter build ipa --release --dart-define-from-file=.env.prod
 
 ---
 *End of Document — HapoPay Mobile v1.0.0*
+---
+
+## Design & Theming (Mobile)
+
+This repo ships a mobile-first design system tailored for Flutter. See the mobile design guide in [docs/DESIGNS.md](docs/DESIGNS.md) which contains:
+
+- Tokenized color palette and dark-mode variants.
+- Flutter `ThemeData` starter example and recommended `tokens.dart` pipeline.
+- Component mappings (Buttons, Cards, Inputs, AppBar, Bottom Navigation) and accessibility guidance.
+
+Quick commands to run the app with environment files:
+
+```bash
+# development
+flutter run --dart-define-from-file=.env.dev
+
+# production build
+flutter build appbundle --release --dart-define-from-file=.env.prod
+```
+
+Recommended implementation notes:
+- Keep token overrides in `lib/core/theme/tokens.dart` and import that from `app_theme.dart`.
+- Use Riverpod to expose runtime theme toggles and `ThemeMode` state.
+- Store icons in `assets/icons/` and declare them in `pubspec.yaml`.
+
+## Contributing — Issues & Maintainers
+
+We track actionable work in `issues.md` at the repository root. Maintainers should use it to triage and assign tasks. Key expectations:
+
+- Prefix issue branches with `feat/`, `fix/`, or `chore/` and include the issue number.
+- Open PRs should reference the issue number and include a short testing checklist.
+- Add `BREAKING` to PR title when changes modify public APIs or tokens.
+
+See `issues.md` for initial tasks and priorities.
+
+---
+
+*End of Document — HapoPay Mobile v1.0.0*
