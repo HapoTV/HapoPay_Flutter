@@ -1,0 +1,42 @@
+name: Code Quality Checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [ main ]
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.19.0'
+        cache: true
+    
+    - name: Install dependencies
+      run: |
+        flutter pub get
+        dart pub global activate dart_code_metrics
+    
+    - name: Run code metrics
+      run: |
+        dart pub global run dart_code_metrics:metrics analyze lib
+        dart pub global run dart_code_metrics:metrics check-unused-code lib
+        dart pub global run dart_code_metrics:metrics check-unused-files lib
+    
+    - name: Check documentation coverage
+      run: dart doc --dry-run
+    
+    - name: Run import sorter check
+      run: dart run import_sorter:main --check
+    
+    - name: Validate translations (if using i18n)
+      run: dart run slang validate
+      continue-on-error: true
