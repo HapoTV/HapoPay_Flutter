@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../shared/widgets/action_card.dart';
-import '../auth/providers/auth_provider.dart';
+import '../../../shared/widgets/action_card.dart';
+import '../../auth/providers/auth_provider.dart';
 
 class ParentDashboardScreen extends ConsumerWidget {
   const ParentDashboardScreen({super.key});
