@@ -1,0 +1,49 @@
+name: Security Scanning
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 0 * * 0'  # Weekly on Sundays
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.19.0'
+    
+    - name: Install dependencies
+      run: flutter pub get
+    
+    - name: Run dependency vulnerability check
+      uses: snyk/actions/dart@master
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        args: --severity-threshold=medium
+    
+    - name: Check for outdated packages
+      run: flutter pub outdated
+    
+    - name: Run security analysis
+      run: dart analyze --fatal-infos
+    
+    - name: Secret scanning
+      uses: gitleaks/gitleaks-action@v2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: CodeQL Analysis
+      uses: github/codeql-action/init@v3
+      with:
+        languages: dart
+    
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
