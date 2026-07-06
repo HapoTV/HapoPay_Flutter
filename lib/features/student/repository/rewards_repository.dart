@@ -22,20 +22,8 @@ class RewardsRepository {
   // GET /api/rewards/{studentId}/
   // -------------------------------------------------------------------------
   Future<RewardModel> fetchRewards(String studentId) async {
-    try {
-      final response = await _dio.get('/rewards/$studentId/');
-      return RewardModel.fromJson(response.data as Map<String, dynamic>);
-    } on DioException catch (e) {
-      // If the backend is not yet reachable (dev mode), return demo data
-      // so the UI is always exercised.  Remove this fallback when backend
-      // is stable and you want real error propagation.
-      if (e.type == DioExceptionType.connectionError ||
-          e.type == DioExceptionType.connectionTimeout ||
-          e.response?.statusCode == 404) {
-        return RewardModel.demo();
-      }
-      rethrow;
-    }
+    final response = await _dio.get('/rewards/$studentId/');
+    return RewardModel.fromJson(response.data as Map<String, dynamic>);
   }
 
   // -------------------------------------------------------------------------
@@ -47,28 +35,11 @@ class RewardsRepository {
     String studentId,
     String achievementId,
   ) async {
-    try {
-      final response = await _dio.post(
-        '/rewards/$studentId/claim/',
-        data: {'achievement_id': achievementId},
-      );
-      return RewardModel.fromJson(response.data as Map<String, dynamic>);
-    } on DioException catch (e) {
-      // Fallback: optimistically mark achievement as claimed in demo data.
-      if (e.type == DioExceptionType.connectionError ||
-          e.type == DioExceptionType.connectionTimeout ||
-          e.response?.statusCode == 404) {
-        final demo = RewardModel.demo();
-        final updatedAchievements = demo.achievements.map((a) {
-          if (a.id == achievementId && a.earned) {
-            return a.copyWith(claimed: true);
-          }
-          return a;
-        }).toList();
-        return demo.copyWith(achievements: updatedAchievements);
-      }
-      rethrow;
-    }
+    final response = await _dio.post(
+      '/rewards/$studentId/claim/',
+      data: {'achievement_id': achievementId},
+    );
+    return RewardModel.fromJson(response.data as Map<String, dynamic>);
   }
 }
 
