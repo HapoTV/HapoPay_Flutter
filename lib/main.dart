@@ -12,7 +12,7 @@ void main() async {
     if (EnvConfig.supabaseUrl.isNotEmpty && EnvConfig.supabaseAnonKey.isNotEmpty) {
       await Supabase.initialize(
         url: EnvConfig.supabaseUrl,
-        anonKey: EnvConfig.supabaseAnonKey,
+        publishableKey: EnvConfig.supabaseAnonKey,
       );
     }
   } catch (e) {

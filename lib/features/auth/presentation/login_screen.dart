@@ -29,6 +29,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         );
 
     final authState = ref.read(authProvider);
+    if (!mounted) return;
     if (authState.user != null) {
       if (authState.user!.role == UserRole.parent) {
         context.go('/parent');
