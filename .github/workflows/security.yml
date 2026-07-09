@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [ main ]
   schedule:
-    - cron: '0 0 * * 0'  # Weekly on Sundays
+    - cron: '0 0 * * 0'
 
 jobs:
   security:
@@ -17,26 +17,25 @@ jobs:
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.22.0'  # ✅ Changed from 3.19.0 to 3.22.0
-        channel: 'stable'  # ✅ Added for consistency
-        cache: true  # ✅ Added for faster builds
+        channel: 'stable'
+        cache: true
     
     - name: Install dependencies
       run: flutter pub get
     
-    - name: Run dependency vulnerability check
-      uses: snyk/actions/dart@master
+    - name: Run Snyk security scan (optional)
+      uses: snyk/actions/dart@v0.4.0
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       with:
         args: --severity-threshold=medium
-      continue-on-error: true  # ✅ Added so pipeline doesn't fail on Snyk issues
+      continue-on-error: true
     
-    - name: Check for outdated packages
+    - name: Check outdated packages
       run: flutter pub outdated
-      continue-on-error: true  # ✅ Added - outdated packages shouldn't fail build
+      continue-on-error: true
     
-    - name: Run security analysis
+    - name: Run static analysis
       run: dart analyze --fatal-infos
     
     - name: Secret scanning

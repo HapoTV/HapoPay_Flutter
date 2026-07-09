@@ -19,7 +19,6 @@ jobs:
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.22.0'  # ✅ This is correct (Dart 3.4.0)
         channel: 'stable'
         cache: true
     
@@ -52,4 +51,3 @@ jobs:
       if: matrix.platform == 'ios'
       run: |
         flutter build ios --no-codesign
-      # Note: Actual iOS signing requires macOS runner
