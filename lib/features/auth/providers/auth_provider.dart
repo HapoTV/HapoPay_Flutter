@@ -11,12 +11,7 @@ class AuthState {
   final bool isLoading;
   final String? error;
 
-  AuthState({
-    this.user,
-    this.token,
-    this.isLoading = false,
-    this.error,
-  });
+  AuthState({this.user, this.token, this.isLoading = false, this.error});
 
   AuthState copyWith({
     UserModel? user,
@@ -54,7 +49,8 @@ class Auth extends _$Auth {
   Future<void> login(String email, String password) async {
     state = state.copyWith(isLoading: true, error: null);
     try {
-      final (user, token) = await ref.read(authRepositoryProvider).login(email, password);
+      final (user, token) =
+          await ref.read(authRepositoryProvider).login(email, password);
       await _storage.write(key: 'jwt_token', value: token);
       state = state.copyWith(user: user, token: token, isLoading: false);
     } catch (e) {

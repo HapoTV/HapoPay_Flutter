@@ -17,7 +17,7 @@ GoRouter appRouter(Ref ref) {
     initialLocation: '/login',
     redirect: (context, state) {
       final isLoggingIn = state.matchedLocation == '/login';
-      
+
       if (authState.token == null) {
         return '/login';
       }
@@ -32,10 +32,7 @@ GoRouter appRouter(Ref ref) {
       return null;
     },
     routes: [
-      GoRoute(
-        path: '/login',
-        builder: (context, state) => const LoginScreen(),
-      ),
+      GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
       GoRoute(
         path: '/parent',
         builder: (context, state) => const ParentDashboardScreen(),

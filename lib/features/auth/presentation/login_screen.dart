@@ -23,10 +23,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   void _onLogin() async {
-    await ref.read(authProvider.notifier).login(
-          _emailController.text,
-          _passwordController.text,
-        );
+    await ref
+        .read(authProvider.notifier)
+        .login(_emailController.text, _passwordController.text);
 
     final authState = ref.read(authProvider);
     if (authState.user != null) {
@@ -36,9 +35,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         context.go('/student');
       }
     } else if (authState.error != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(authState.error!)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(authState.error!)));
     }
   }
 
@@ -54,7 +53,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Icon(Icons.account_balance_wallet, size: 80, color: Color(0xFFBB86FC)),
+              const Icon(
+                Icons.account_balance_wallet,
+                size: 80,
+                color: Color(0xFFBB86FC),
+              ),
               const SizedBox(height: 32),
               const Text(
                 'Welcome to HapoPay',
