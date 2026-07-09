@@ -1,4 +1,4 @@
-package com.hapopay.hapo_pay
+package com.example.hapo_pay
 
 import io.flutter.embedding.android.FlutterActivity
 
