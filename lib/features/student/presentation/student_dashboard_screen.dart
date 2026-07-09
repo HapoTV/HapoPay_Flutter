@@ -157,8 +157,8 @@ class _RewardsSummaryCard extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Rewards',
-                      style: TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.bold)),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   Text('Tap to view your achievements',
                       style: TextStyle(color: Colors.white54, fontSize: 13)),
                 ],
@@ -215,13 +215,13 @@ class _RewardsSummaryCard extends ConsumerWidget {
                   ),
                   // Tier badge
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 5),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     decoration: BoxDecoration(
                       color: tierColor.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                          color: tierColor.withValues(alpha: 0.3)),
+                      border:
+                          Border.all(color: tierColor.withValues(alpha: 0.3)),
                     ),
                     child: Text(
                       '${reward.tier.badge} ${reward.tier.label}',
@@ -253,8 +253,7 @@ class _RewardsSummaryCard extends ConsumerWidget {
                     nextPts != null
                         ? '${nextPts - reward.totalPoints} pts to next tier'
                         : '🏆 Max tier!',
-                    style: const TextStyle(
-                        color: Colors.white38, fontSize: 11),
+                    style: const TextStyle(color: Colors.white38, fontSize: 11),
                   ),
                 ],
               ),

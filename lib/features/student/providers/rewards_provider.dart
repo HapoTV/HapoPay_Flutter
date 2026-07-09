@@ -79,9 +79,5 @@ class Rewards extends _$Rewards {
 
 @riverpod
 int earnedAchievementsCount(Ref ref) {
-  return ref
-          .watch(rewardsProvider)
-          .valueOrNull
-          ?.earnedAchievementsCount ??
-      0;
+  return ref.watch(rewardsProvider).valueOrNull?.earnedAchievementsCount ?? 0;
 }

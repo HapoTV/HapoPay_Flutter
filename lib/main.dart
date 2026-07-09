@@ -9,7 +9,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   try {
-    if (EnvConfig.supabaseUrl.isNotEmpty && EnvConfig.supabaseAnonKey.isNotEmpty) {
+    if (EnvConfig.supabaseUrl.isNotEmpty &&
+        EnvConfig.supabaseAnonKey.isNotEmpty) {
       await Supabase.initialize(
         url: EnvConfig.supabaseUrl,
         publishableKey: EnvConfig.supabaseAnonKey,

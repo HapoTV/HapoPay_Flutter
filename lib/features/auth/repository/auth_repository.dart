@@ -19,7 +19,7 @@ class AuthRepository {
 
     final user = UserModel.fromJson(response.data['user']);
     final token = response.data['access'] as String;
-    
+
     return (user, token);
   }
 

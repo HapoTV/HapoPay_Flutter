@@ -198,7 +198,8 @@ class RewardModel {
 
   /// Progress fraction (0.0–1.0) within the current milestone band.
   double get tierProgressFraction {
-    final currentMilestone = milestones.where((m) => m.tier == tier).firstOrNull;
+    final currentMilestone =
+        milestones.where((m) => m.tier == tier).firstOrNull;
     if (currentMilestone == null) return 0.0;
     final min = currentMilestone.minPoints;
     final max = currentMilestone.maxPoints;
@@ -208,8 +209,7 @@ class RewardModel {
     return ((totalPoints - min) / range).clamp(0.0, 1.0);
   }
 
-  int get earnedAchievementsCount =>
-      achievements.where((a) => a.earned).length;
+  int get earnedAchievementsCount => achievements.where((a) => a.earned).length;
 
   factory RewardModel.fromJson(Map<String, dynamic> json) {
     return RewardModel(
