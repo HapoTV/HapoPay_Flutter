@@ -7,7 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hapo_pay/features/app.dart';
+import 'package:hapo_pay/app.dart';
 
 
 void main() {
