@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/auth/presentation/login_screen.dart';
 import '../../features/parent/presentation/parent_dashboard_screen.dart';
 import '../../features/student/presentation/student_dashboard_screen.dart';
+import '../../features/student/presentation/rewards_screen.dart';
 import '../../features/auth/providers/auth_provider.dart';
 import '../../features/auth/models/user_model.dart';
 
@@ -40,6 +41,12 @@ GoRouter appRouter(Ref ref) {
       GoRoute(
         path: '/student',
         builder: (context, state) => const StudentDashboardScreen(),
+        routes: [
+          GoRoute(
+            path: 'rewards',
+            builder: (context, state) => const RewardsScreen(),
+          ),
+        ],
       ),
     ],
   );

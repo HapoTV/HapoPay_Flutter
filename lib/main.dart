@@ -14,7 +14,7 @@ void main() async {
         EnvConfig.supabaseAnonKey.isNotEmpty) {
       await Supabase.initialize(
         url: EnvConfig.supabaseUrl,
-        anonKey: EnvConfig.supabaseAnonKey,
+        publishableKey: EnvConfig.supabaseAnonKey,
       );
     }
   } catch (e) {
