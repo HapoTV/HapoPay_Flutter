@@ -1,5 +1,8 @@
 name: Security Scanning
 
+permissions:
+  contents: write
+
 on:
   push:
     branches: [ main ]
@@ -13,16 +16,35 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
         channel: 'stable'
         cache: true
-    
+
+    - name: Ensure git user
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+    # Do not attempt to auto-push on schedule runs
+    - name: Format code and commit if needed
+      if: github.event_name != 'schedule'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        flutter pub get
+        dart format .
+        git add -A
+        if [ -n "$(git status --porcelain)" ]; then
+          git commit -m "chore: format code (ci)"
+          git push
+        fi
+
     - name: Install dependencies
       run: flutter pub get
-    
+
     - name: Run Snyk security scan (optional)
       uses: snyk/actions/dart@v0.4.0
       env:
@@ -30,23 +52,23 @@ jobs:
       with:
         args: --severity-threshold=medium
       continue-on-error: true
-    
+
     - name: Check outdated packages
       run: flutter pub outdated
       continue-on-error: true
-    
+
     - name: Run static analysis
       run: dart analyze --fatal-infos
-    
+
     - name: Secret scanning
       uses: gitleaks/gitleaks-action@v2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    
+
     - name: CodeQL Analysis
       uses: github/codeql-action/init@v3
       with:
         languages: dart
-    
+
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
