@@ -591,14 +591,10 @@ class _AchievementCard extends StatelessWidget {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       decoration: BoxDecoration(
-        color: isEarned
-            ? const Color(0xFF2A2A1A)
-            : const Color(0xFF1A1A1A),
+        color: isEarned ? const Color(0xFF2A2A1A) : const Color(0xFF1A1A1A),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: isEarned
-              ? glowColor.withValues(alpha: 0.4)
-              : Colors.white10,
+          color: isEarned ? glowColor.withValues(alpha: 0.4) : Colors.white10,
           width: isEarned ? 1.5 : 1,
         ),
         boxShadow: isEarned
@@ -663,7 +659,8 @@ class _AchievementCard extends StatelessWidget {
                     size: 20,
                   )
                 else
-                  const Icon(Icons.lock_rounded, color: Colors.white24, size: 18),
+                  const Icon(Icons.lock_rounded,
+                      color: Colors.white24, size: 18),
               ],
             ),
 
@@ -701,13 +698,11 @@ class _AchievementCard extends StatelessWidget {
                 children: [
                   Text(
                     '${achievement.progress} / ${achievement.goal}',
-                    style:
-                        const TextStyle(color: Colors.white38, fontSize: 10),
+                    style: const TextStyle(color: Colors.white38, fontSize: 10),
                   ),
                   Text(
                     '${((progress ?? 0) * 100).toInt()}%',
-                    style:
-                        const TextStyle(color: Colors.white54, fontSize: 10),
+                    style: const TextStyle(color: Colors.white54, fontSize: 10),
                   ),
                 ],
               ),
@@ -725,8 +720,7 @@ class _AchievementCard extends StatelessWidget {
 
             // Points pill
             Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
               decoration: BoxDecoration(
                 color: isEarned
                     ? glowColor.withValues(alpha: 0.1)
@@ -925,7 +919,8 @@ class _LoadingSkeletonState extends State<_LoadingSkeleton>
             mainAxisSpacing: 14,
             crossAxisSpacing: 14,
             childAspectRatio: 0.82,
-            children: List.generate(4, (_) => _box(height: double.infinity, radius: 20)),
+            children: List.generate(
+                4, (_) => _box(height: double.infinity, radius: 20)),
           ),
         ],
       ),
@@ -988,8 +983,8 @@ class _ErrorBody extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 28, vertical: 14),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
               ),
             ),
           ],
