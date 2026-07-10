@@ -12,14 +12,14 @@ String _$rewardsRepositoryHash() => r'89d242b4c6d2c9da591cc1fe3111d2587e4bd5d9';
 @ProviderFor(rewardsRepository)
 final rewardsRepositoryProvider =
     AutoDisposeProvider<RewardsRepository>.internal(
-  rewardsRepository,
-  name: r'rewardsRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$rewardsRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      rewardsRepository,
+      name: r'rewardsRepositoryProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$rewardsRepositoryHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element

@@ -54,8 +54,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Icon(Icons.account_balance_wallet,
-                  size: 80, color: Color(0xFFBB86FC)),
+              const Icon(
+                Icons.account_balance_wallet,
+                size: 80,
+                color: Color(0xFFBB86FC),
+              ),
               const SizedBox(height: 32),
               const Text(
                 'Welcome to HapoPay',
