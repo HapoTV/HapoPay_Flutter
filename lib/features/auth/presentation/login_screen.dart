@@ -23,10 +23,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   void _onLogin() async {
-    await ref.read(authProvider.notifier).login(
-          _emailController.text,
-          _passwordController.text,
-        );
+    await ref
+        .read(authProvider.notifier)
+        .login(_emailController.text, _passwordController.text);
 
     final authState = ref.read(authProvider);
     if (!mounted) return;
@@ -37,9 +36,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         context.go('/student');
       }
     } else if (authState.error != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(authState.error!)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(authState.error!)));
     }
   }
 

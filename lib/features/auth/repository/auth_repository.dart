@@ -11,11 +11,11 @@ class AuthRepository {
 
   AuthRepository(this._dio);
 
-  Future<(UserModel, String)> login(String email, String password) async {
-    final response = await _dio.post('/token/', data: {
-      'email': email,
-      'password': password,
-    });
+  Future<(UserModel, dynamic)> login(String email, String password) async {
+    final response = await _dio.post(
+      '/token/',
+      data: {'email': email, 'password': password},
+    );
 
     final user = UserModel.fromJson(response.data['user']);
     final token = response.data['access'] as String;

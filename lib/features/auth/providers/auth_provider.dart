@@ -11,12 +11,7 @@ class AuthState {
   final bool isLoading;
   final String? error;
 
-  AuthState({
-    this.user,
-    this.token,
-    this.isLoading = false,
-    this.error,
-  });
+  AuthState({this.user, this.token, this.isLoading = false, this.error});
 
   AuthState copyWith({
     UserModel? user,
