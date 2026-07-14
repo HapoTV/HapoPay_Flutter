@@ -1,39 +1,68 @@
-import 'package:go_router/go_router.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
 import '../../features/auth/presentation/login_screen.dart';
+import '../../features/auth/presentation/providers/auth_providers.dart';
 import '../../features/parent/presentation/parent_dashboard_screen.dart';
-import '../../features/student/presentation/student_dashboard_screen.dart';
 import '../../features/student/presentation/rewards_screen.dart';
-import '../../features/auth/providers/auth_provider.dart';
-import '../../features/auth/models/user_model.dart';
+import '../../features/student/presentation/student_dashboard_screen.dart';
 
-part 'app_router.g.dart';
+// ---------------------------------------------------------------------------
+// Internal refresh notifier
+// ---------------------------------------------------------------------------
 
-@riverpod
-GoRouter appRouter(Ref ref) {
-  final authState = ref.watch(authProvider);
+/// Bridges Riverpod auth state changes to [GoRouter]'s [refreshListenable].
+///
+/// When [AuthState] changes, [notifyListeners] is called, triggering
+/// GoRouter to re-evaluate the [redirect] function without recreating
+/// the [GoRouter] instance.
+class _RouterRefreshNotifier extends ChangeNotifier {
+  _RouterRefreshNotifier(Ref<GoRouter> ref) {
+    ref.listen<AuthState>(authProvider, (_, __) => notifyListeners());
+  }
+}
 
-  return GoRouter(
+// ---------------------------------------------------------------------------
+// Provider
+// ---------------------------------------------------------------------------
+
+/// Application-scoped [GoRouter] provider.
+///
+/// The router is created once and kept alive; navigation state is preserved
+/// across auth transitions. Auth-driven redirects are handled by
+/// [_RouterRefreshNotifier] + the [redirect] callback.
+final appRouterProvider = Provider<GoRouter>((ref) {
+  final refreshNotifier = _RouterRefreshNotifier(ref);
+
+  final router = GoRouter(
     initialLocation: '/login',
+    refreshListenable: refreshNotifier,
     redirect: (context, state) {
-      final isLoggingIn = state.matchedLocation == '/login';
+      // Read (not watch) avoids re-creating the GoRouter on every state change;
+      // re-evaluation is triggered by refreshNotifier instead.
+      final authState = ref.read(authProvider);
+      final location = state.matchedLocation;
 
-      if (authState.token == null) {
-        return '/login';
+      // Still restoring session — do not redirect yet.
+      if (authState.isUnknown) return null;
+
+      if (!authState.isAuthenticated) {
+        return location == '/login' ? null : '/login';
       }
 
-      if (isLoggingIn) {
-        if (authState.user?.role == UserRole.parent) {
-          return '/parent';
-        }
-        return '/student';
+      // Authenticated: redirect away from login.
+      if (location == '/login') {
+        return authState.user?.isParent == true ? '/parent' : '/student';
       }
 
       return null;
     },
     routes: [
-      GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
+      GoRoute(
+        path: '/login',
+        builder: (context, state) => const LoginScreen(),
+      ),
       GoRoute(
         path: '/parent',
         builder: (context, state) => const ParentDashboardScreen(),
@@ -50,4 +79,11 @@ GoRouter appRouter(Ref ref) {
       ),
     ],
   );
-}
+
+  ref.onDispose(() {
+    refreshNotifier.dispose();
+    router.dispose();
+  });
+
+  return router;
+});
