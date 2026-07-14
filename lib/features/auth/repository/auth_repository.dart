@@ -1,34 +1,8 @@
-import 'package:dio/dio.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../../../core/network/dio_client.dart';
-import '../models/user_model.dart';
-
-part 'auth_repository.g.dart';
-
-class AuthRepository {
-  final Dio _dio;
-
-  AuthRepository(this._dio);
-
-  Future<(UserModel, dynamic)> login(String email, String password) async {
-    final response = await _dio.post(
-      '/token/',
-      data: {'email': email, 'password': password},
-    );
-
-    final user = UserModel.fromJson(response.data['user']);
-    final token = response.data['access'] as String;
-
-    return (user, token);
-  }
-
-  Future<void> logout() async {
-    // In a real app, you might notify the backend or just clear local storage
-  }
-}
-
-@riverpod
-AuthRepository authRepository(Ref ref) {
-  return AuthRepository(ref.watch(dioProvider));
-}
+/// This file is superseded by the Clean Architecture data layer.
+///
+/// Canonical location:
+///   lib/features/auth/data/repositories/auth_repository_impl.dart
+///   lib/features/auth/data/providers.dart  (Riverpod provider)
+///
+/// Kept as a stub so the directory structure remains discoverable.
+library;
