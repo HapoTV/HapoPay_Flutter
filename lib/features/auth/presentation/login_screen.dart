@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../providers/auth_provider.dart';
-import '../models/user_model.dart';
+
+import '../providers/auth_provider.dart'; // re-exports authProvider, AppUser, UserRole
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -22,23 +22,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     super.dispose();
   }
 
-  void _onLogin() async {
+  Future<void> _onLogin() async {
     await ref
         .read(authProvider.notifier)
-        .login(_emailController.text, _passwordController.text);
+        .login(_emailController.text.trim(), _passwordController.text);
+
+    if (!mounted) return;
 
     final authState = ref.read(authProvider);
-    if (!mounted) return;
-    if (authState.user != null) {
-      if (authState.user!.role == UserRole.parent) {
-        context.go('/parent');
-      } else {
-        context.go('/student');
-      }
-    } else if (authState.error != null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(authState.error!)));
+    if (authState.isAuthenticated) {
+      // The router's redirect will navigate automatically; no manual push
+      // needed. Explicit navigation is kept as a fast-path fallback.
+      context.go(authState.user?.isParent == true ? '/parent' : '/student');
+    } else if (authState.errorMessage != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(authState.errorMessage!)),
+      );
     }
   }
 
