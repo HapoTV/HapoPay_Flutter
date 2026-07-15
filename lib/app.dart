@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hapo_pay/core/router/app_router.dart';
-import 'package:hapo_pay/core/theme/app_theme.dart';
+
+import 'core/router/app_router.dart';
+import 'core/theme/app_theme.dart';
 
 class HapoPayApp extends ConsumerWidget {
   const HapoPayApp({super.key});
@@ -12,7 +13,8 @@ class HapoPayApp extends ConsumerWidget {
 
     return MaterialApp.router(
       title: 'HapoPay',
-      theme: AppTheme.darkTheme,
+      theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
       routerConfig: router,
       debugShowCheckedModeBanner: false,
     );

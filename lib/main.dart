@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hapo_pay/app.dart';
-import 'package:logger/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import 'app.dart';
 import 'core/config/env_config.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  var logger = Logger();
 
-  try {
-    if (EnvConfig.supabaseUrl.isNotEmpty &&
-        EnvConfig.supabaseAnonKey.isNotEmpty) {
-      await Supabase.initialize(
-        url: EnvConfig.supabaseUrl,
-        publishableKey: EnvConfig.supabaseAnonKey,
-      );
-    }
-  } catch (e) {
-    logger.e('Supabase initialization failed: $e');
+  // Supabase is reserved for future OAuth / social-login integration.
+  // Initialization is skipped when no URL is configured so the app works
+  // fully with JWT auth without requiring a Supabase project.
+  if (EnvConfig.supabaseUrl.isNotEmpty) {
+    await Supabase.initialize(
+      url: EnvConfig.supabaseUrl,
+      // ignore: deprecated_member_use
+      anonKey: EnvConfig.supabaseAnonKey,
+    );
   }
 
   runApp(const ProviderScope(child: HapoPayApp()));
