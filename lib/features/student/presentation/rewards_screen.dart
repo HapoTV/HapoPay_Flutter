@@ -420,15 +420,15 @@ class _TierLadder extends StatelessWidget {
                         color: isActive
                             ? color.withValues(alpha: 0.2)
                             : isUnlocked
-                            ? color.withValues(alpha: 0.08)
-                            : const Color(0xFF1E1E1E),
+                                ? color.withValues(alpha: 0.08)
+                                : const Color(0xFF1E1E1E),
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
                           color: isActive
                               ? color
                               : isUnlocked
-                              ? color.withValues(alpha: 0.3)
-                              : Colors.white12,
+                                  ? color.withValues(alpha: 0.3)
+                                  : Colors.white12,
                           width: isActive ? 2 : 1,
                         ),
                       ),
@@ -445,8 +445,8 @@ class _TierLadder extends StatelessWidget {
                               color: isActive
                                   ? color
                                   : isUnlocked
-                                  ? color.withValues(alpha: 0.7)
-                                  : Colors.white30,
+                                      ? color.withValues(alpha: 0.7)
+                                      : Colors.white30,
                               fontSize: 11,
                               fontWeight: isActive
                                   ? FontWeight.bold
