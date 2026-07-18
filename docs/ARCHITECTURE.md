@@ -1,31 +1,42 @@
 # Architecture & Design Patterns
 
-HapoPay uses a Clean Layered Architecture designed around feature modules. This limits cross-coupling and allows independent development.
+HapoPay uses a Clean Layered Architecture organized into feature modules (`lib/features/<feature_name>/`). This limits cross-coupling and allows independent development.
+
+## Contents
+
+- [High-Level Overview](#high-level-overview)
+- [State Management — Riverpod](#state-management--riverpod)
+- [Navigation — GoRouter](#navigation--gorouter)
+- [Backend Integration](#backend-integration)
+- [Worked Example](#worked-example)
 
 ## High-Level Overview
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│                    Presentation Layer                   │
-│   Widgets / Screens       ◄──►      Riverpod State      │
-└────────────────────────┬────────────────────────────────┘
-                         │ Ref watches / Notifier triggers
-                         ▼
-┌─────────────────────────────────────────────────────────┐
-│                    Repository Layer                     │
-│               Business Rule Integrations                │
-└────────────────────────┬────────────────────────────────┘
-                         │ API / SDK Request Maps
-                         ▼
-┌─────────────────────────────────────────────────────────┐
-│                    Data Source Layer                    │
-│      Dio HTTP Client      │    Supabase Realtime/Storage│
-└───────────────────────────┴─────────────────────────────┘
+┌───────────────────────────────────────────────────────────┐
+│                     Presentation Layer                     │
+│    Widgets / Screens        ◄──►        Riverpod State     │
+└───────────────────────────┬─────────────────────────────────┘
+                             │ Ref watches / Notifier triggers
+                             ▼
+┌───────────────────────────────────────────────────────────┐
+│                      Repository Layer                      │
+│                 Business Rule Integrations                 │
+└───────────────────────────┬─────────────────────────────────┘
+                             │ API / SDK request maps
+                             ▼
+┌───────────────────────────────────────────────────────────┐
+│                     Data Source Layer                      │
+│       Dio HTTP Client        │      Supabase Realtime /     │
+│                               │         Storage              │
+└───────────────────────────────┴─────────────────────────────┘
 ```
+
+Each feature module (e.g. `lib/features/student/`) implements this same three-layer split internally — model, repository, provider, presentation — so features can be developed, tested, and reasoned about in isolation.
 
 ## State Management — Riverpod
 
-The app uses Riverpod 2.x for state management. Providers and Notifiers are annotated to generate highly-optimized code using the `riverpod_generator`.
+The app uses Riverpod 2.x for state management. Providers and Notifiers are annotated to generate highly-optimized code using `riverpod_generator`.
 
 ### Example: Transaction List Notifier
 
@@ -77,10 +88,12 @@ final appRouter = GoRouter(
 );
 ```
 
+Feature-scoped routes (such as `/student/rewards`) are nested under their parent route rather than declared flat, keeping route ownership aligned with feature modules.
+
 ## Backend Integration
 
 ### Django REST API
-All operations involving accounting adjustments, debit authorizations, registrations, and database mutations are handled by the Django REST framework. The Flutter client utilizes **Dio** to interface with these API endpoints.
+All operations involving accounting adjustments, debit authorizations, registrations, and database mutations are handled by the Django REST Framework. The Flutter client uses **Dio** to interface with these API endpoints.
 
 ### Supabase Realtime
 To display live payment events, the mobile client subscribes directly to Supabase's database streaming service.
@@ -98,3 +111,7 @@ final transactionChannel = supabase
     )
     .subscribe();
 ```
+
+## Worked Example
+
+The Student Rewards System is a complete, shipped implementation of this architecture end-to-end — model, repository, provider, and presentation layers, plus routing. See [`rewards_system.md`](rewards_system.md) for a walkthrough of how the pattern above maps to real files in `lib/features/student/`.

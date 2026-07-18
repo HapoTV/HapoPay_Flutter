@@ -1,11 +1,13 @@
 # HapoPay Student Rewards System
 
+> Implements the layered pattern described in [`ARCHITECTURE.md`](ARCHITECTURE.md); tracked under Milestone 3 in [`NEXT_STEPS.md`](NEXT_STEPS.md).
+
 ## Overview
 The Student Rewards System adds gamification to the HapoPay Flutter app. It provides a dedicated rewards screen with progress bars, tier badges, and achievements, along with a live summary card embedded directly in the student dashboard.
 
 ## Status
-**Completed** - The rewards system UI, state management, and backend data modeling are fully implemented and integrated. 
-The codebase has been verified with zero static analysis errors (`flutter analyze` passed). 
+**Completed** — the rewards system UI, state management, and backend data modeling are fully implemented and integrated.
+The codebase has been verified with zero static analysis errors (`flutter analyze` passed).
 Code generation for Riverpod and GoRouter is up-to-date.
 
 ## Architecture
@@ -25,7 +27,7 @@ The feature follows the **Feature-Driven Architecture** within `lib/features/stu
   - Uses Riverpod's `AsyncNotifier` for state management.
   - Optimistically updates UI state when claiming achievements before the backend confirms.
 
-- **Presentation Layer**: 
+- **Presentation Layer**:
   - `rewards_screen.dart`: The full-page UI featuring an animated Hero Card (tier progress), Tier Ladder, and Achievement Grid.
   - `student_dashboard_screen.dart`: Updated to feature a `_RewardsSummaryCard` that links directly to the full rewards screen.
 
@@ -46,7 +48,7 @@ flutter analyze
 
 ## How to Test
 1. Log in to the application as a Student.
-2. Observe the **Rewards Summary Card** on the main dashboard which displays the current tier and points.
+2. Observe the **Rewards Summary Card** on the main dashboard, which displays the current tier and points.
 3. Tap the summary card to navigate to the **Rewards Screen**.
 4. View the animated progress bars and tier ladder.
 5. Tap an earned, unclaimed achievement in the grid to trigger the claim flow.

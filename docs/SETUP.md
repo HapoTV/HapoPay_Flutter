@@ -10,7 +10,7 @@ Follow these steps to get the HapoPay mobile application running on your local m
 | Dart | 3.4.0+ | Bundled with Flutter SDK |
 | Android Studio | Hedgehog+ | For Android emulator & SDK manager |
 | Xcode | 15+ | macOS only — required for iOS builds |
-| Django Backend | Running | API layer on `http://localhost:8000/api` |
+| Django Backend | Running | API layer, default `http://localhost:8000/api` |
 
 ## Installation Steps
 
@@ -25,17 +25,19 @@ Follow these steps to get the HapoPay mobile application running on your local m
    flutter pub get
    ```
 
-3. **Configure Environment Variables**
+3. **Configure environment variables**
+
    Create a `.env.dev` file from the example:
    ```bash
    cp .env.example .env.dev
    ```
-   Fill in your credentials:
-   - `SUPABASE_URL`
-   - `SUPABASE_ANON_KEY`
-   - `API_BASE_URL`
 
-4. **Run Code Generation**
+   Fill in `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and `API_BASE_URL`.
+
+   > For the full variable reference, per-environment values (dev vs. prod), and common setup pitfalls (emulator loopback, keystore config), see **[SETUP_ENV.md](SETUP_ENV.md)**.
+
+4. **Run code generation**
+
    HapoPay uses Riverpod with code generation. Run this command to generate the necessary files:
    ```bash
    flutter pub run build_runner build --delete-conflicting-outputs
@@ -53,6 +55,14 @@ flutter run --dart-define-from-file=.env.dev
 
 ## Troubleshooting
 
-- **Android Emulator connection**: If `localhost` doesn't work, use `10.0.2.2`.
-- **Realtime issues**: Ensure Supabase Replication is enabled for your tables.
-- **Keystore errors**: Check `android/key.properties` exists for release builds.
+This guide covers Flutter/toolchain setup issues only. For `.env` / environment-variable issues specifically (emulator loopback IPs, Supabase replication, JWT mismatches, Android keystore errors), see the full troubleshooting table in **[SETUP_ENV.md](SETUP_ENV.md)**.
+
+| Issue | Quick Fix |
+|-------|-----------|
+| `flutter doctor` reports missing licenses | Run `flutter doctor --android-licenses` and accept all |
+| `build_runner` conflicts on generated files | Re-run with `--delete-conflicting-outputs` |
+| App won't launch on iOS Simulator | Confirm Xcode command line tools: `xcode-select --install` |
+
+## Next Steps
+
+Once your environment is running, see [NEXT_STEPS.md](NEXT_STEPS.md) for the project roadmap and current milestone status.
