@@ -11,6 +11,7 @@ import 'auth_interceptor.dart';
 import 'cache_interceptor.dart';
 import 'retry_interceptor.dart';
 import 'error_interceptor.dart';
+import 'mock_interceptor.dart';
 
 /// The single entry point for all API communication.
 ///
@@ -47,7 +48,7 @@ class DioClient {
     );
 
     dio.interceptors.addAll([
-      CacheInterceptor(cacheService),
+      MockInterceptor(),
       AuthInterceptor(storage: storage, eventBus: eventBus, dio: dio),
       RetryInterceptor(dio: dio),
       ErrorInterceptor(),
