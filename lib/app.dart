@@ -12,7 +12,7 @@ class HapoPayApp extends ConsumerWidget {
 
     return MaterialApp.router(
       title: 'HapoPay',
-      theme: AppTheme.darkTheme,
+      theme: AppTheme.lightTheme,
       routerConfig: router,
       debugShowCheckedModeBanner: false,
     );

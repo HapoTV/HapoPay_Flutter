@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hapo_pay/shared/widgets/app_primary_button.dart';
 
 import '../../../core/constants/constants.dart';
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -169,37 +170,38 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ),
                   verticalSpaceMedium,
-                  Container(
-                    width: double.infinity,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          theme.colorScheme.primary,
-                          theme.colorScheme.primaryContainer,
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: ElevatedButton(
-                      onPressed: null, // Implement login functionality
-                      child: Row(
-                        mainAxisSize: .min,
-                        children: [
-                          Text(
-                            "Sign In",
-                            style: theme.textTheme.labelLarge!.copyWith(
-                              color: theme.colorScheme.inverseSurface,
-                            ),
-                          ),
-                          horizontalSpaceTiny,
-                          const Icon(Icons.arrow_forward, color: Colors.white),
-                        ],
-                      ),
-                    ),
-                  ),
+                  AppPrimaryButtonWidget(label: "Sign Up", onTap: ()=> context.push("/signUp"), icon:(Icons.arrow_forward),)
+                  // Container(
+                  //   width: double.infinity,
+                  //   height: 50,
+                  //   decoration: BoxDecoration(
+                  //     gradient: LinearGradient(
+                  //       colors: [
+                  //         theme.colorScheme.primary,
+                  //         theme.colorScheme.primaryContainer,
+                  //       ],
+                  //       begin: Alignment.topLeft,
+                  //       end: Alignment.bottomRight,
+                  //     ),
+                  //     borderRadius: BorderRadius.circular(8),
+                  //   ),
+                  //   child: ElevatedButton(
+                  //     onPressed: null, // Implement login functionality
+                  //     child: Row(
+                  //       mainAxisSize: .min,
+                  //       children: [
+                  //         Text(
+                  //           "Sign In",
+                  //           style: theme.textTheme.labelLarge!.copyWith(
+                  //             color: theme.colorScheme.inverseSurface,
+                  //           ),
+                  //         ),
+                  //         horizontalSpaceTiny,
+                  //         const Icon(Icons.arrow_forward, color: Colors.white),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
