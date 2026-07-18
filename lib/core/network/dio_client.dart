@@ -75,8 +75,8 @@ final dioClientProvider = Provider<DioClient>((ref) {
   final eventBus = ref.watch(authEventBusProvider);
   final cacheService = ref.watch(localCacheServiceProvider);
   return DioClient.create(
-    storage: storage, 
-    eventBus: eventBus, 
+    storage: storage,
+    eventBus: eventBus,
     cacheService: cacheService,
   );
 });

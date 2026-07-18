@@ -10,12 +10,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class MockAdapter implements HttpClientAdapter {
   int attempts = 0;
-  final Future<ResponseBody> Function(RequestOptions options, int attempt) callback;
+  final Future<ResponseBody> Function(RequestOptions options, int attempt)
+      callback;
 
   MockAdapter(this.callback);
 
   @override
-  Future<ResponseBody> fetch(RequestOptions options, Stream<List<int>>? requestStream, Future<void>? cancelFuture) async {
+  Future<ResponseBody> fetch(RequestOptions options,
+      Stream<List<int>>? requestStream, Future<void>? cancelFuture) async {
     attempts++;
     return callback(options, attempts);
   }
@@ -30,7 +32,8 @@ void main() {
   });
 
   group('ErrorInterceptor Tests', () {
-    test('Should map DioExceptionType.connectionTimeout to NetworkException', () async {
+    test('Should map DioExceptionType.connectionTimeout to NetworkException',
+        () async {
       final dio = Dio();
       dio.interceptors.add(ErrorInterceptor());
       dio.httpClientAdapter = MockAdapter((options, attempt) async {
@@ -45,7 +48,8 @@ void main() {
         fail('Should have thrown');
       } on DioException catch (e) {
         expect(e.error, isA<NetworkException>());
-        expect((e.error as NetworkException).message, contains('internet connection'));
+        expect((e.error as NetworkException).message,
+            contains('internet connection'));
       }
     });
 
@@ -76,7 +80,7 @@ void main() {
       final dio = Dio();
       // Use maxRetries: 2 so the test doesn't take too long (1s + 2s = 3s total wait)
       dio.interceptors.add(RetryInterceptor(dio: dio, maxRetries: 2));
-      
+
       final adapter = MockAdapter((options, attempt) async {
         throw DioException(
           requestOptions: options,
@@ -97,10 +101,10 @@ void main() {
     test('Should fallback to cache on network error', () async {
       final prefs = await SharedPreferences.getInstance();
       final cacheService = LocalCacheService(prefs);
-      
+
       final dio = Dio();
       dio.interceptors.add(CacheInterceptor(cacheService));
-      
+
       // Simulate success first to populate cache
       dio.httpClientAdapter = MockAdapter((options, attempt) async {
         return ResponseBody.fromString('{"data": "cached"}', 200, headers: {
@@ -108,7 +112,7 @@ void main() {
         });
       });
       await dio.get('https://example.com');
-      
+
       // Now simulate offline
       dio.httpClientAdapter = MockAdapter((options, attempt) async {
         throw DioException(
@@ -116,7 +120,7 @@ void main() {
           type: DioExceptionType.connectionError,
         );
       });
-      
+
       final response = await dio.get('https://example.com');
       expect(response.statusCode, 200);
       expect(response.data, equals({'data': 'cached'}));

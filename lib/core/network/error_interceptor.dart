@@ -47,7 +47,8 @@ class ErrorInterceptor extends Interceptor {
           return ServerException(statusCode: statusCode);
         default:
           return UnknownException(
-            message: _extractMessage(err.response) ?? 'An unexpected error occurred.',
+            message: _extractMessage(err.response) ??
+                'An unexpected error occurred.',
           );
       }
     }

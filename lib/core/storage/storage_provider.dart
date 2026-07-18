@@ -14,7 +14,8 @@ final tokenStorageProvider = Provider<SecureStorageService>(
 
 /// Provider for SharedPreferences. Must be overridden in main.dart.
 final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
-  throw UnimplementedError('sharedPreferencesProvider must be overridden in ProviderScope');
+  throw UnimplementedError(
+      'sharedPreferencesProvider must be overridden in ProviderScope');
 });
 
 /// Provides the application-scoped [LocalCacheService].
