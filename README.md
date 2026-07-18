@@ -12,20 +12,20 @@
 ## Table of Contents
 
 1. [Project Overview](#1-project-overview)
-2. [Getting Started](docs/SETUP.md)
-3. [Project Structure](#3-project-structure)
-4. [Architecture & Design Patterns](docs/ARCHITECTURE.md)
-5. [Features & Screens](docs/FEATURES.md)
-6. [Dependencies](#6-dependencies)
-7. [Configuration & Environment Variables](#7-configuration--environment-variables)
-8. [Build & Deployment](#8-build--deployment)
-9. [Changelog](#9-changelog)
+2. [Documentation](#2-documentation)
+3. [Dependencies](#3-dependencies)
+4. [Configuration & Environment Variables](#4-configuration--environment-variables)
+5. [Build & Deployment](#5-build--deployment)
+6. [Troubleshooting & FAQs](#6-troubleshooting--faqs)
+7. [Changelog](#7-changelog)
+8. [Design & Theming](#design--theming-mobile)
+9. [Contributing — Issues & Maintainers](#contributing--issues--maintainers)
 
 ---
 
 ## 1. Project Overview
 
-HapoPay is a parent-student money management and smart spending platform. The mobile application, built with Flutter, provides parents with the tools to manage their children's allowances, adjust transaction limits, and monitor spending in real time. For students, it provides a safe payment interface using dynamic QR codes, biometric authorization, and a gamified financial education hub. 
+HapoPay is a parent-student money management and smart spending platform. The mobile application, built with Flutter, provides parents with the tools to manage their children's allowances, adjust transaction limits, and monitor spending in real time. For students, it provides a safe payment interface using dynamic QR codes, biometric authorization, and a gamified financial education hub.
 
 The application utilizes a hybrid backend model: Django serves as the primary business logic and transaction gateway, while Supabase provides real-time transaction updates, persistent database hosting, and storage.
 
@@ -35,14 +35,17 @@ The application utilizes a hybrid backend model: Django serves as the primary bu
 
 For detailed information, please refer to the following documents in the `docs/` folder:
 
+- **[Setup & Installation](docs/SETUP.md)**: Step-by-step guide to setting up your local environment and running the app.
+- **[Environment Variables Setup](docs/SETUP_ENV.md)**: Configuring `.env.dev` / `.env.prod`, required variables, and troubleshooting common environment issues (emulator loopback, keystore setup).
 - **[Architecture & Design](docs/ARCHITECTURE.md)**: Deep dive into the clean layered architecture, state management with Riverpod, and navigation with GoRouter.
 - **[Features & Screens](docs/FEATURES.md)**: Walkthrough of the authentication flow, parent dashboard, and student payment features.
-- **[Setup & Installation](docs/SETUP.md)**: Step-by-step guide to setting up your local environment and running the app.
+- **[Design & Theming](docs/DESIGNS.md)**: Mobile design system, color tokens, and component mappings.
+- **[Project Roadmap](docs/NEXT_STEPS.md)**: Milestones and current build status.
+- **[Rewards System](docs/rewards_system.md)**: Implementation detail for the student gamification/rewards feature.
 
 ---
 
-
-## 7. Dependencies
+## 3. Dependencies
 
 Below are the primary packages declared in the application's configuration:
 
@@ -62,9 +65,9 @@ Below are the primary packages declared in the application's configuration:
 
 ---
 
-## 8. Configuration & Environment Variables
+## 4. Configuration & Environment Variables
 
-### 8.1 Environment Files
+### 4.1 Environment Files
 
 The application requires environment properties to be injected during the build phase. Create a `.env.dev` or `.env.prod` file from the repository's sample configuration.
 
@@ -75,7 +78,9 @@ SUPABASE_ANON_KEY=your-supabase-public-anon-key
 API_BASE_URL=http://localhost:8000/api
 ```
 
-### 8.2 Safe Environment Injection
+> For a full walkthrough of these variables, per-environment values, and common pitfalls, see **[docs/SETUP_ENV.md](docs/SETUP_ENV.md)**.
+
+### 4.2 Safe Environment Injection
 
 Pass variables directly to compile commands to prevent hardcoding configuration strings into project scripts:
 
@@ -86,9 +91,9 @@ flutter run --dart-define-from-file=.env.dev
 
 ---
 
-## 9. Build & Deployment
+## 5. Build & Deployment
 
-### 9.1 Android Signing
+### 5.1 Android Signing
 
 Set up the key details locally in `android/key.properties`. Ensure this file is never tracked in source control.
 
@@ -109,7 +114,7 @@ flutter build appbundle --release --dart-define-from-file=.env.prod
 flutter build apk --release --dart-define-from-file=.env.prod
 ```
 
-### 9.2 iOS Deployment
+### 5.2 iOS Deployment
 
 iOS distribution builds require provisioning profiles and code-signing assets within Xcode.
 
@@ -120,7 +125,7 @@ flutter build ipa --release --dart-define-from-file=.env.prod
 
 ---
 
-## 10. Troubleshooting & FAQs
+## 6. Troubleshooting & FAQs
 
 | Error / Symptom | Likely Cause | Solution |
 |-----------------|-------------|---------|
@@ -130,9 +135,11 @@ flutter build ipa --release --dart-define-from-file=.env.prod
 | Keystore compilation failure | Missing `key.properties` configuration | Ensure `key.properties` exists in the `android/` directory and points to a valid `.jks` file. |
 | Camera viewport blank | Permissions configurations omitted | Check iOS `Info.plist` and Android `AndroidManifest.xml` for `NSCameraUsageDescription` and `CAMERA` permissions. |
 
+For a deeper breakdown of environment-related issues specifically, see **[docs/SETUP_ENV.md](docs/SETUP_ENV.md)**.
+
 ---
 
-## 11. Changelog
+## 7. Changelog
 
 ### v1.0.0 — May 2026
 - Core authentication logic integration using Django JWT tokens.
@@ -145,8 +152,6 @@ flutter build ipa --release --dart-define-from-file=.env.prod
 - Push notifications via backend-triggered messages.
 - Advanced achievement badges and student savings goals.
 
----
-*End of Document — HapoPay Mobile v1.0.0*
 ---
 
 ## Design & Theming (Mobile)
@@ -171,6 +176,8 @@ Recommended implementation notes:
 - Keep token overrides in `lib/core/theme/tokens.dart` and import that from `app_theme.dart`.
 - Use Riverpod to expose runtime theme toggles and `ThemeMode` state.
 - Store icons in `assets/icons/` and declare them in `pubspec.yaml`.
+
+---
 
 ## Contributing — Issues & Maintainers
 

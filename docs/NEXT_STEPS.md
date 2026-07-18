@@ -2,6 +2,7 @@
 
 This document outlines the roadmap for the HapoPay mobile application, focusing on Django backend integration, feature completion, and UI/UX refinement.
 
+
 ## Milestone 1: Authentication & Secure Session Bridge
 **Goal:** Establish the core security layer and connect the Flutter app to the Django backend.
 - **Django Integration:** Configure Django REST Framework (DRF) to handle JWT exchanges and user registration.
@@ -11,7 +12,7 @@ This document outlines the roadmap for the HapoPay mobile application, focusing 
 
 ## Milestone 2: Parent Financial Dashboard
 **Goal:** Build the primary interface for parents to monitor and control student spending.
-- **Control Center:** Implement "Spending Limit" sliders and the "Card Lock" toggle, connecting them to Django PATCH endpoints.
+- **Control Center:** Implement "Spending Limit" sliders and the "Card Lock" toggle, connecting them to Django `PATCH` endpoints.
 - **Real-time Feed:** Integrate Supabase Postgres streams to display a live, interactive transaction history that updates instantly as students spend.
 - **Data Visualization:** Use charts or progress indicators to show weekly spending vs. limits.
 
@@ -19,7 +20,7 @@ This document outlines the roadmap for the HapoPay mobile application, focusing 
 **Goal:** Enable the payment execution logic and the gamified rewards experience.
 - **QR Payment Engine:** Build the dynamic QR code generator (for receiving) and the `mobile_scanner` viewport (for paying) with signed authorization payloads.
 - **Transaction Logic:** Finalize the Django handshake for payment processing, ensuring atomic updates to the ledger.
-- **Gamification:** Implement the Rewards Tracker UI, linking visual progress bars to the `/api/rewards/` Django route.
+- **Gamification:** Rewards Tracker UI implemented, with visual progress bars and tier ladder linked to the `/api/rewards/` Django route. See [`rewards_system.md`](rewards_system.md) for the full implementation writeup.
 
 ## Milestone 4: UI/UX Refinement & Aesthetic Polish
 **Goal:** Transform the functional prototype into a high-fidelity, premium experience.
@@ -30,5 +31,10 @@ This document outlines the roadmap for the HapoPay mobile application, focusing 
 ## Milestone 5: Optimization & Deployment Readiness
 **Goal:** Finalize the application for production release on Android and iOS.
 - **Resilience:** Implement Dio interceptors for global error handling, retry logic, and offline data caching via `shared_preferences`.
-- **Security Audit:** Validate token expiration flows, deep-linking security, and secure environment variable handling (`.env.dev` vs `.env.prod`).
+- **Security Audit:** Validate token expiration flows, deep-linking security, and secure environment variable handling (`.env.dev` vs `.env.prod` — see [`SETUP_ENV.md`](SETUP_ENV.md)).
 - **Launch Prep:** Configure App Store/Play Store metadata, set up deployment flavors, and run final performance profiling on physical devices.
+- **CI/CD Pipeline:** Set up a CI/CD pipeline (build, `flutter analyze`, test suite) that must pass before a release build is cut — all automated tests green as a hard gate for deployment.
+
+---
+
+*Status markers above reflect what's documented as shipped elsewhere in `docs/` as of this update (e.g. `rewards_system.md`). Update them as each item lands — this file is only as accurate as the last person who edited it.*
