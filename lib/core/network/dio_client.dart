@@ -4,16 +4,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../config/env_config.dart';
 import '../storage/secure_storage_service.dart';
+import '../storage/local_cache_service.dart';
 import '../storage/storage_provider.dart';
 import 'auth_event_bus.dart';
 import 'auth_interceptor.dart';
+import 'cache_interceptor.dart';
+import 'retry_interceptor.dart';
+import 'error_interceptor.dart';
 import 'mock_interceptor.dart';
 
 /// The single entry point for all API communication.
 ///
 /// Wraps a fully configured [Dio] instance with:
 /// - Base URL and timeout settings from [EnvConfig]
+/// - [CacheInterceptor] for offline fallback
 /// - [AuthInterceptor] for JWT injection and silent token refresh
+/// - [RetryInterceptor] for handling intermittent network issues
+/// - [ErrorInterceptor] for mapping unhandled exceptions to UI-friendly types
 /// - [LogInterceptor] in debug builds only (tokens are never logged)
 ///
 /// Consume the configured [Dio] instance through [dioProvider] in
@@ -27,6 +34,7 @@ class DioClient {
   factory DioClient.create({
     required SecureStorageService storage,
     required AuthEventBus eventBus,
+    required LocalCacheService cacheService,
   }) {
     final dio = Dio(
       BaseOptions(
@@ -42,6 +50,8 @@ class DioClient {
     dio.interceptors.addAll([
       MockInterceptor(),
       AuthInterceptor(storage: storage, eventBus: eventBus, dio: dio),
+      RetryInterceptor(dio: dio),
+      ErrorInterceptor(),
       if (kDebugMode)
         LogInterceptor(
           requestBody: true,
@@ -63,7 +73,12 @@ class DioClient {
 final dioClientProvider = Provider<DioClient>((ref) {
   final storage = ref.watch(tokenStorageProvider);
   final eventBus = ref.watch(authEventBusProvider);
-  return DioClient.create(storage: storage, eventBus: eventBus);
+  final cacheService = ref.watch(localCacheServiceProvider);
+  return DioClient.create(
+    storage: storage, 
+    eventBus: eventBus, 
+    cacheService: cacheService,
+  );
 });
 
 /// Convenience provider exposing the raw [Dio] instance from [dioClientProvider].
