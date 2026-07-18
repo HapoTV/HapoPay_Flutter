@@ -5,8 +5,11 @@ import 'package:go_router/go_router.dart';
 import '../../features/auth/presentation/login_screen.dart';
 import '../../features/auth/presentation/providers/auth_providers.dart';
 import '../../features/parent/presentation/parent_dashboard_screen.dart';
+import '../../features/parent/presentation/family_ledger_screen.dart';
+import '../../features/parent/presentation/spending_limits_screen.dart';
 import '../../features/student/presentation/rewards_screen.dart';
 import '../../features/student/presentation/student_dashboard_screen.dart';
+import '../../features/qrcode/presentation/qrcode.dart';
 
 // ---------------------------------------------------------------------------
 // Internal refresh notifier
@@ -66,6 +69,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/parent',
         builder: (context, state) => const ParentDashboardScreen(),
+        routes: [
+          GoRoute(
+            path: 'ledger',
+            builder: (context, state) => const FamilyLedgerScreen(),
+          ),
+          GoRoute(
+            path: 'limits',
+            builder: (context, state) => const SpendingLimitsScreen(),
+          ),
+        ],
       ),
       GoRoute(
         path: '/student',
@@ -74,6 +87,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: 'rewards',
             builder: (context, state) => const RewardsScreen(),
+          ),
+          GoRoute(
+            path: 'pay-qr',
+            builder: (context, state) => const PayQrScreen(),
+          ),
+          GoRoute(
+            path: 'my-qr',
+            builder: (context, state) => const MyQrScreen(),
           ),
         ],
       ),

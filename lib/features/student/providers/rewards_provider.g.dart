@@ -24,7 +24,7 @@ final earnedAchievementsCountProvider = AutoDisposeProvider<int>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef EarnedAchievementsCountRef = AutoDisposeProviderRef<int>;
-String _$rewardsHash() => r'48c1db478a708a857992a784db65c86a3ce3cb41';
+String _$rewardsHash() => r'442aaea883925ee036722c6a8bb1ab154ddc8b4f';
 
 /// See also [Rewards].
 @ProviderFor(Rewards)
