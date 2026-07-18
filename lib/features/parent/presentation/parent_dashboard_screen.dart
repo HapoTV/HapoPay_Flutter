@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../shared/widgets/action_card.dart';
 import '../../auth/providers/auth_provider.dart';
 
@@ -39,21 +40,21 @@ class ParentDashboardScreen extends ConsumerWidget {
               title: 'Family Ledger',
               subtitle: 'View all student transactions',
               icon: Icons.history,
-              onTap: () {},
+              onTap: () => context.push('/parent/ledger'),
             ),
             const SizedBox(height: 16),
             ActionCard(
               title: 'Spending Limits',
               subtitle: 'Set daily and weekly caps',
               icon: Icons.speed,
-              onTap: () {},
+              onTap: () => context.push('/parent/limits'),
             ),
             const SizedBox(height: 16),
             ActionCard(
               title: 'Card Lock',
               subtitle: 'Suspend payment capabilities',
               icon: Icons.lock_outline,
-              onTap: () {},
+              onTap: () => context.push('/parent/limits'),
               color: Colors.redAccent,
             ),
           ],

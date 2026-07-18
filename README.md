@@ -12,14 +12,16 @@
 ## Table of Contents
 
 1. [Project Overview](#1-project-overview)
-2. [Documentation](#2-documentation)
-3. [Dependencies](#3-dependencies)
-4. [Configuration & Environment Variables](#4-configuration--environment-variables)
-5. [Build & Deployment](#5-build--deployment)
-6. [Troubleshooting & FAQs](#6-troubleshooting--faqs)
-7. [Changelog](#7-changelog)
-8. [Design & Theming](#design--theming-mobile)
-9. [Contributing — Issues & Maintainers](#contributing--issues--maintainers)
+2. [Getting Started](docs/SETUP.md)
+3. [Project Structure](#3-project-structure)
+4. [Architecture & Design Patterns](docs/ARCHITECTURE.md)
+5. [Features & Screens](docs/FEATURES.md)
+6. [Dependencies](#6-dependencies)
+7. [Configuration & Environment Variables](#7-configuration--environment-variables)
+8. [Build & Deployment](#8-build--deployment)
+9. [Changelog](#9-changelog)
+10. [Contributing](#10-contributing)
+11. [Code of Conduct](#11-code-of-conduct)
 
 ---
 
@@ -177,17 +179,18 @@ Recommended implementation notes:
 - Use Riverpod to expose runtime theme toggles and `ThemeMode` state.
 - Store icons in `assets/icons/` and declare them in `pubspec.yaml`.
 
----
+## 10. Contributing
 
-## Contributing — Issues & Maintainers
+We welcome contributions! Please read our [Contributing Guide](CONTRIBUTING.md) for details on:
+- Development workflow and branch strategy
+- Code standards and linting
+- Testing requirements
+- Pull request process
+- Commit message conventions
 
-We track actionable work in `issues.md` at the repository root. Maintainers should use it to triage and assign tasks. Key expectations:
+## 11. Code of Conduct
 
-- Prefix issue branches with `feat/`, `fix/`, or `chore/` and include the issue number.
-- Open PRs should reference the issue number and include a short testing checklist.
-- Add `BREAKING` to PR title when changes modify public APIs or tokens.
-
-See `issues.md` for initial tasks and priorities.
+This project adheres to a [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to the project maintainers.
 
 ---
 
