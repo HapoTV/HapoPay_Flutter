@@ -64,7 +64,7 @@ class AppColors {
     inversePrimary: Color(0xFFFFB2BF),
     surfaceTint: Color(0xFFBC004F),
   );
-  
+
   // Specific UI component colors from docs
   static const Color darkInputFill = Color(0xFF070B14);
   static const Color lightInputBorder = Color(0xFFE2E8F0);

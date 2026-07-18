@@ -30,13 +30,14 @@ String _$rewardsHash() => r'48c1db478a708a857992a784db65c86a3ce3cb41';
 @ProviderFor(Rewards)
 final rewardsProvider =
     AutoDisposeAsyncNotifierProvider<Rewards, RewardModel>.internal(
-  Rewards.new,
-  name: r'rewardsProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$rewardsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      Rewards.new,
+      name: r'rewardsProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$rewardsHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$Rewards = AutoDisposeAsyncNotifier<RewardModel>;
 // ignore_for_file: type=lint

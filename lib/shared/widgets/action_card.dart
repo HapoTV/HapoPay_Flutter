@@ -36,8 +36,10 @@ class ActionCard extends StatelessWidget {
                       .withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(icon,
-                    color: color ?? Theme.of(context).colorScheme.primary),
+                child: Icon(
+                  icon,
+                  color: color ?? Theme.of(context).colorScheme.primary,
+                ),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -47,15 +49,17 @@ class ActionCard extends StatelessWidget {
                     Text(
                       title,
                       style: const TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold),
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     Text(
                       subtitle,
                       style: TextStyle(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withValues(alpha: 0.6)),
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withValues(alpha: 0.6),
+                      ),
                     ),
                   ],
                 ),

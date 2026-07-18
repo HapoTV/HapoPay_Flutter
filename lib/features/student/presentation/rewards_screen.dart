@@ -109,9 +109,11 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen>
       ),
       body: rewardsAsync.when(
         loading: () => const _LoadingSkeleton(),
-        error: (e, _) => _ErrorBody(onRetry: () {
-          ref.read(rewardsProvider.notifier).refresh();
-        }),
+        error: (e, _) => _ErrorBody(
+          onRetry: () {
+            ref.read(rewardsProvider.notifier).refresh();
+          },
+        ),
         data: (reward) => RefreshIndicator(
           color: _tierColors[reward.tier] ?? Colors.amber,
           onRefresh: () => ref.read(rewardsProvider.notifier).refresh(),
@@ -243,8 +245,10 @@ class _HeroCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.black26,
                   borderRadius: BorderRadius.circular(20),
@@ -270,8 +274,10 @@ class _HeroCard extends StatelessWidget {
               // Streak badge
               if (reward.streakDays > 0)
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.black26,
                     borderRadius: BorderRadius.circular(20),
@@ -342,10 +348,7 @@ class _HeroCard extends StatelessWidget {
                     nextPoints != null
                         ? 'Next tier in ${nextPoints - reward.totalPoints} pts'
                         : '🏆 Max tier reached!',
-                    style: const TextStyle(
-                      color: Colors.white70,
-                      fontSize: 12,
-                    ),
+                    style: const TextStyle(color: Colors.white70, fontSize: 12),
                   ),
                   Text(
                     '${(progress * 100).toInt()}%',
@@ -410,20 +413,22 @@ class _TierLadder extends StatelessWidget {
                       duration: const Duration(milliseconds: 400),
                       curve: Curves.easeOut,
                       padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 6),
+                        vertical: 10,
+                        horizontal: 6,
+                      ),
                       decoration: BoxDecoration(
                         color: isActive
                             ? color.withValues(alpha: 0.2)
                             : isUnlocked
-                                ? color.withValues(alpha: 0.08)
-                                : const Color(0xFF1E1E1E),
+                            ? color.withValues(alpha: 0.08)
+                            : const Color(0xFF1E1E1E),
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
                           color: isActive
                               ? color
                               : isUnlocked
-                                  ? color.withValues(alpha: 0.3)
-                                  : Colors.white12,
+                              ? color.withValues(alpha: 0.3)
+                              : Colors.white12,
                           width: isActive ? 2 : 1,
                         ),
                       ),
@@ -431,9 +436,7 @@ class _TierLadder extends StatelessWidget {
                         children: [
                           Text(
                             tier.badge,
-                            style: TextStyle(
-                              fontSize: isActive ? 22 : 18,
-                            ),
+                            style: TextStyle(fontSize: isActive ? 22 : 18),
                           ),
                           const SizedBox(height: 4),
                           Text(
@@ -442,8 +445,8 @@ class _TierLadder extends StatelessWidget {
                               color: isActive
                                   ? color
                                   : isUnlocked
-                                      ? color.withValues(alpha: 0.7)
-                                      : Colors.white30,
+                                  ? color.withValues(alpha: 0.7)
+                                  : Colors.white30,
                               fontSize: 11,
                               fontWeight: isActive
                                   ? FontWeight.bold
@@ -573,10 +576,7 @@ class _AchievementCard extends StatelessWidget {
   final AchievementModel achievement;
   final VoidCallback onClaim;
 
-  const _AchievementCard({
-    required this.achievement,
-    required this.onClaim,
-  });
+  const _AchievementCard({required this.achievement, required this.onClaim});
 
   @override
   Widget build(BuildContext context) {
@@ -635,7 +635,9 @@ class _AchievementCard extends StatelessWidget {
                     onTap: onClaim,
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 4),
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
                           colors: [Color(0xFFFFD700), Color(0xFFFF8C00)],
@@ -659,8 +661,11 @@ class _AchievementCard extends StatelessWidget {
                     size: 20,
                   )
                 else
-                  const Icon(Icons.lock_rounded,
-                      color: Colors.white24, size: 18),
+                  const Icon(
+                    Icons.lock_rounded,
+                    color: Colors.white24,
+                    size: 18,
+                  ),
               ],
             ),
 
@@ -789,9 +794,10 @@ class _AnimatedProgressBarState extends State<_AnimatedProgressBar>
       vsync: this,
       duration: const Duration(milliseconds: 1000),
     );
-    _anim = Tween<double>(begin: 0, end: widget.value).animate(
-      CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic),
-    );
+    _anim = Tween<double>(
+      begin: 0,
+      end: widget.value,
+    ).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic));
     _ctrl.forward();
   }
 
@@ -799,9 +805,10 @@ class _AnimatedProgressBarState extends State<_AnimatedProgressBar>
   void didUpdateWidget(_AnimatedProgressBar oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.value != widget.value) {
-      _anim = Tween<double>(begin: _anim.value, end: widget.value).animate(
-        CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic),
-      );
+      _anim = Tween<double>(
+        begin: _anim.value,
+        end: widget.value,
+      ).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic));
       _ctrl
         ..reset()
         ..forward();
@@ -854,9 +861,10 @@ class _LoadingSkeletonState extends State<_LoadingSkeleton>
       vsync: this,
       duration: const Duration(milliseconds: 1200),
     )..repeat(reverse: true);
-    _anim = Tween<double>(begin: 0.3, end: 0.7).animate(
-      CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut),
-    );
+    _anim = Tween<double>(
+      begin: 0.3,
+      end: 0.7,
+    ).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut));
   }
 
   @override
@@ -890,25 +898,29 @@ class _LoadingSkeletonState extends State<_LoadingSkeleton>
           const SizedBox(height: 24),
           _box(height: 16, width: 140), // section header
           const SizedBox(height: 12),
-          Row(children: [
-            Expanded(child: _box(height: 80, radius: 12)),
-            const SizedBox(width: 8),
-            Expanded(child: _box(height: 80, radius: 12)),
-            const SizedBox(width: 8),
-            Expanded(child: _box(height: 80, radius: 12)),
-            const SizedBox(width: 8),
-            Expanded(child: _box(height: 80, radius: 12)),
-          ]),
+          Row(
+            children: [
+              Expanded(child: _box(height: 80, radius: 12)),
+              const SizedBox(width: 8),
+              Expanded(child: _box(height: 80, radius: 12)),
+              const SizedBox(width: 8),
+              Expanded(child: _box(height: 80, radius: 12)),
+              const SizedBox(width: 8),
+              Expanded(child: _box(height: 80, radius: 12)),
+            ],
+          ),
           const SizedBox(height: 24),
           _box(height: 16, width: 120),
           const SizedBox(height: 12),
-          Row(children: [
-            Expanded(child: _box(height: 70, radius: 12)),
-            const SizedBox(width: 12),
-            Expanded(child: _box(height: 70, radius: 12)),
-            const SizedBox(width: 12),
-            Expanded(child: _box(height: 70, radius: 12)),
-          ]),
+          Row(
+            children: [
+              Expanded(child: _box(height: 70, radius: 12)),
+              const SizedBox(width: 12),
+              Expanded(child: _box(height: 70, radius: 12)),
+              const SizedBox(width: 12),
+              Expanded(child: _box(height: 70, radius: 12)),
+            ],
+          ),
           const SizedBox(height: 28),
           _box(height: 16, width: 150),
           const SizedBox(height: 12),
@@ -920,7 +932,9 @@ class _LoadingSkeletonState extends State<_LoadingSkeleton>
             crossAxisSpacing: 14,
             childAspectRatio: 0.82,
             children: List.generate(
-                4, (_) => _box(height: double.infinity, radius: 20)),
+              4,
+              (_) => _box(height: double.infinity, radius: 20),
+            ),
           ),
         ],
       ),
@@ -983,8 +997,10 @@ class _ErrorBody extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 28,
+                  vertical: 14,
+                ),
               ),
             ),
           ],
