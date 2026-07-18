@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../shared/widgets/action_card.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../providers/rewards_provider.dart';
+import '../providers/student_account_provider.dart';
 import '../models/reward_model.dart';
 
 // ---------------------------------------------------------------------------
@@ -22,6 +23,7 @@ class StudentDashboardScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(authProvider.select((s) => s.user));
+    final accountAsync = ref.watch(studentAccountProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -67,22 +69,49 @@ class StudentDashboardScreen extends ConsumerWidget {
                     style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    '\$120.50',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 36,
-                      fontWeight: FontWeight.bold,
+                  accountAsync.when(
+                    loading: () => const SizedBox(
+                      height: 86,
+                      child: Center(
+                        child: CircularProgressIndicator(color: Colors.white),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 24),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      const _BalanceInfo(label: 'Today', value: '\$15.00'),
-                      Container(width: 1, height: 40, color: Colors.white24),
-                      const _BalanceInfo(label: 'Limit', value: '\$50.00'),
-                    ],
+                    error: (err, _) => SizedBox(
+                      height: 86,
+                      child: Center(
+                        child: Text(
+                          'Error loading balance',
+                          style: TextStyle(color: Colors.red[100], fontSize: 14),
+                        ),
+                      ),
+                    ),
+                    data: (account) => Column(
+                      children: [
+                        Text(
+                          '\$${account.balance.toStringAsFixed(2)}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 36,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            _BalanceInfo(
+                              label: 'Today',
+                              value: '\$${account.todaySpent.toStringAsFixed(2)}',
+                            ),
+                            Container(width: 1, height: 40, color: Colors.white24),
+                            _BalanceInfo(
+                              label: 'Limit',
+                              value: '\$${account.dailyLimit.toStringAsFixed(2)}',
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -95,14 +124,14 @@ class StudentDashboardScreen extends ConsumerWidget {
               title: 'Pay with QR',
               subtitle: 'Scan a merchant code',
               icon: Icons.qr_code_scanner,
-              onTap: () {},
+              onTap: () => context.push('/student/pay-qr'),
             ),
             const SizedBox(height: 16),
             ActionCard(
               title: 'My QR Code',
               subtitle: 'Show code to receive money',
               icon: Icons.qr_code,
-              onTap: () {},
+              onTap: () => context.push('/student/my-qr'),
             ),
             const SizedBox(height: 16),
 

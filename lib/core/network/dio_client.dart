@@ -7,6 +7,7 @@ import '../storage/secure_storage_service.dart';
 import '../storage/storage_provider.dart';
 import 'auth_event_bus.dart';
 import 'auth_interceptor.dart';
+import 'mock_interceptor.dart';
 
 /// The single entry point for all API communication.
 ///
@@ -39,6 +40,7 @@ class DioClient {
     );
 
     dio.interceptors.addAll([
+      MockInterceptor(),
       AuthInterceptor(storage: storage, eventBus: eventBus, dio: dio),
       if (kDebugMode)
         LogInterceptor(
