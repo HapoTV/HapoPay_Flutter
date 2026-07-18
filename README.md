@@ -20,6 +20,8 @@
 7. [Configuration & Environment Variables](#7-configuration--environment-variables)
 8. [Build & Deployment](#8-build--deployment)
 9. [Changelog](#9-changelog)
+10. [Contributing](#10-contributing)
+11. [Code of Conduct](#11-code-of-conduct)
 
 ---
 
@@ -172,15 +174,18 @@ Recommended implementation notes:
 - Use Riverpod to expose runtime theme toggles and `ThemeMode` state.
 - Store icons in `assets/icons/` and declare them in `pubspec.yaml`.
 
-## Contributing — Issues & Maintainers
+## 10. Contributing
 
-We track actionable work in `issues.md` at the repository root. Maintainers should use it to triage and assign tasks. Key expectations:
+We welcome contributions! Please read our [Contributing Guide](CONTRIBUTING.md) for details on:
+- Development workflow and branch strategy
+- Code standards and linting
+- Testing requirements
+- Pull request process
+- Commit message conventions
 
-- Prefix issue branches with `feat/`, `fix/`, or `chore/` and include the issue number.
-- Open PRs should reference the issue number and include a short testing checklist.
-- Add `BREAKING` to PR title when changes modify public APIs or tokens.
+## 11. Code of Conduct
 
-See `issues.md` for initial tasks and priorities.
+This project adheres to a [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to the project maintainers.
 
 ---
 
