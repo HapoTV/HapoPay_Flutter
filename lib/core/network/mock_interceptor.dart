@@ -135,7 +135,8 @@ class MockInterceptor extends Interceptor {
 
     // 2. Login
     if (path.contains('/accounts/token/')) {
-      final email = (options.data as Map?)?['email'] as String? ?? 'student@hapopay.com';
+      final email =
+          (options.data as Map?)?['email'] as String? ?? 'student@hapopay.com';
       final isParent = email.toLowerCase().contains('parent');
       _currentUser = {
         'id': isParent ? 'parent_123' : 'student_123',
@@ -148,7 +149,9 @@ class MockInterceptor extends Interceptor {
         requestOptions: options,
         statusCode: 200,
         data: {
-          'access': isParent ? 'mock_access_token_parent' : 'mock_access_token_student',
+          'access': isParent
+              ? 'mock_access_token_parent'
+              : 'mock_access_token_student',
           'refresh': 'mock_refresh_token',
           'user': _currentUser,
         },
@@ -158,8 +161,10 @@ class MockInterceptor extends Interceptor {
 
     // 3. Register
     if (path.contains('/accounts/register/')) {
-      final email = (options.data as Map?)?['email'] as String? ?? 'student@hapopay.com';
-      final fullName = (options.data as Map?)?['full_name'] as String? ?? 'New User';
+      final email =
+          (options.data as Map?)?['email'] as String? ?? 'student@hapopay.com';
+      final fullName =
+          (options.data as Map?)?['full_name'] as String? ?? 'New User';
       final role = (options.data as Map?)?['role'] as String? ?? 'student';
       _currentUser = {
         'id': 'user_${role}_123',
@@ -220,7 +225,8 @@ class MockInterceptor extends Interceptor {
       final studentId = match?.group(1) ?? 'demo';
       _initRewards(studentId);
 
-      final achievementId = (options.data as Map?)?['achievement_id'] as String?;
+      final achievementId =
+          (options.data as Map?)?['achievement_id'] as String?;
       if (achievementId != null && _rewardsData != null) {
         final achievementsList = _rewardsData!['achievements'] as List<dynamic>;
         for (var i = 0; i < achievementsList.length; i++) {
@@ -300,11 +306,12 @@ class MockInterceptor extends Interceptor {
 
     // 9. Process QR payments: /payments/process/
     if (path.contains('/payments/process/')) {
-      final studentId = (options.data as Map?)?['student_id'] as String? ?? 'student_123';
+      final studentId =
+          (options.data as Map?)?['student_id'] as String? ?? 'student_123';
       _initAccount(studentId);
 
       final qrPayload = (options.data as Map?)?['qr_payload'] as String? ?? '';
-      
+
       // Parse QR payload
       Map<String, dynamic> qrData = {};
       try {
@@ -327,7 +334,8 @@ class MockInterceptor extends Interceptor {
       }
 
       final amount = double.tryParse(qrData['amount']?.toString() ?? '') ?? 0.0;
-      final description = qrData['description']?.toString() ?? 'QR Merchant Payment';
+      final description =
+          qrData['description']?.toString() ?? 'QR Merchant Payment';
 
       if (amount <= 0) {
         handler.reject(DioException(
@@ -379,7 +387,9 @@ class MockInterceptor extends Interceptor {
           response: Response(
             requestOptions: options,
             statusCode: 400,
-            data: {'detail': 'Transaction declined: Daily spending limit exceeded.'},
+            data: {
+              'detail': 'Transaction declined: Daily spending limit exceeded.'
+            },
           ),
         ));
         return;

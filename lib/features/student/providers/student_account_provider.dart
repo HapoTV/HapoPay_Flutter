@@ -24,7 +24,7 @@ class StudentAccount extends _$StudentAccount {
   Future<void> payWithQr(String qrPayload) async {
     final user = ref.read(authProvider.select((s) => s.user));
     final studentId = user?.id ?? 'student_123';
-    
+
     // We get the new account state back upon success
     final newAccount = await ref
         .read(studentAccountRepositoryProvider)
@@ -36,7 +36,7 @@ class StudentAccount extends _$StudentAccount {
   Future<void> updateLimit(double limit) async {
     final user = ref.read(authProvider.select((s) => s.user));
     final studentId = user?.id ?? 'student_123';
-    
+
     final newAccount = await ref
         .read(studentAccountRepositoryProvider)
         .updateSpendingLimit(studentId: studentId, limit: limit);

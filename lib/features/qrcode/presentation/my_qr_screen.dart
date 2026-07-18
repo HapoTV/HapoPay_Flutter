@@ -64,7 +64,8 @@ class _MyQrScreenState extends ConsumerState<MyQrScreen> {
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: Colors.white, // QR code needs a white background for scanners to detect it easily
+                color: Colors
+                    .white, // QR code needs a white background for scanners to detect it easily
                 borderRadius: BorderRadius.circular(24),
                 boxShadow: [
                   BoxShadow(
@@ -135,7 +136,8 @@ class _MyQrScreenState extends ConsumerState<MyQrScreen> {
                     const SizedBox(height: 16),
                     TextField(
                       controller: _amountController,
-                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: true),
                       decoration: const InputDecoration(
                         labelText: 'Amount (\$)',
                         prefixIcon: Icon(Icons.attach_money),

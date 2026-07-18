@@ -81,7 +81,8 @@ class StudentDashboardScreen extends ConsumerWidget {
                       child: Center(
                         child: Text(
                           'Error loading balance',
-                          style: TextStyle(color: Colors.red[100], fontSize: 14),
+                          style:
+                              TextStyle(color: Colors.red[100], fontSize: 14),
                         ),
                       ),
                     ),
@@ -101,12 +102,15 @@ class StudentDashboardScreen extends ConsumerWidget {
                           children: [
                             _BalanceInfo(
                               label: 'Today',
-                              value: '\$${account.todaySpent.toStringAsFixed(2)}',
+                              value:
+                                  '\$${account.todaySpent.toStringAsFixed(2)}',
                             ),
-                            Container(width: 1, height: 40, color: Colors.white24),
+                            Container(
+                                width: 1, height: 40, color: Colors.white24),
                             _BalanceInfo(
                               label: 'Limit',
-                              value: '\$${account.dailyLimit.toStringAsFixed(2)}',
+                              value:
+                                  '\$${account.dailyLimit.toStringAsFixed(2)}',
                             ),
                           ],
                         ),

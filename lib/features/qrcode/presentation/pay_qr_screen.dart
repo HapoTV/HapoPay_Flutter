@@ -50,13 +50,16 @@ class _PayQrScreenState extends ConsumerState<PayQrScreen> {
       final data = jsonDecode(payload) as Map<String, dynamic>;
       amount = double.tryParse(data['amount']?.toString() ?? '') ?? 0.0;
       description = data['description']?.toString() ?? 'QR Merchant Payment';
-      recipientName = data['student_name']?.toString() ?? data['merchant_name']?.toString() ?? 'HapoPay Merchant';
+      recipientName = data['student_name']?.toString() ??
+          data['merchant_name']?.toString() ??
+          'HapoPay Merchant';
     } catch (_) {
       // Fallback 1: query string parameters
       try {
         final uri = Uri.parse('?$payload');
         amount = double.tryParse(uri.queryParameters['amount'] ?? '') ?? 0.0;
-        description = uri.queryParameters['description'] ?? 'QR Merchant Payment';
+        description =
+            uri.queryParameters['description'] ?? 'QR Merchant Payment';
         recipientName = uri.queryParameters['merchant'] ?? 'HapoPay Merchant';
       } catch (_) {
         // Fallback 2: plain number
@@ -64,14 +67,16 @@ class _PayQrScreenState extends ConsumerState<PayQrScreen> {
         if (plainAmount != null) {
           amount = plainAmount;
         } else {
-          _showErrorDialog('Invalid QR Code', 'This code is not recognized by HapoPay. Please scan a valid payment code.');
+          _showErrorDialog('Invalid QR Code',
+              'This code is not recognized by HapoPay. Please scan a valid payment code.');
           return;
         }
       }
     }
 
     if (amount <= 0) {
-      _showErrorDialog('Invalid Amount', 'The QR code specifies an invalid transaction amount (\$${amount.toStringAsFixed(2)}).');
+      _showErrorDialog('Invalid Amount',
+          'The QR code specifies an invalid transaction amount (\$${amount.toStringAsFixed(2)}).');
       return;
     }
 
@@ -94,7 +99,8 @@ class _PayQrScreenState extends ConsumerState<PayQrScreen> {
       ),
       builder: (context) {
         return Padding(
-          padding: EdgeInsets.fromLTRB(24, 24, 24, MediaQuery.of(context).viewInsets.bottom + 24),
+          padding: EdgeInsets.fromLTRB(
+              24, 24, 24, MediaQuery.of(context).viewInsets.bottom + 24),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -109,7 +115,10 @@ class _PayQrScreenState extends ConsumerState<PayQrScreen> {
               const SizedBox(height: 24),
               const Text(
                 'Confirm Payment',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
               ),
               const SizedBox(height: 32),
               // Transaction details box
@@ -133,14 +142,19 @@ class _PayQrScreenState extends ConsumerState<PayQrScreen> {
                     const SizedBox(height: 8),
                     Text(
                       'to $recipient',
-                      style: const TextStyle(fontSize: 16, color: Colors.white70),
+                      style:
+                          const TextStyle(fontSize: 16, color: Colors.white70),
                     ),
                     const Divider(height: 32, color: Colors.white12),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('Purpose', style: TextStyle(color: Colors.white54)),
-                        Text(description, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
+                        const Text('Purpose',
+                            style: TextStyle(color: Colors.white54)),
+                        Text(description,
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500)),
                       ],
                     ),
                   ],
@@ -171,7 +185,8 @@ class _PayQrScreenState extends ConsumerState<PayQrScreen> {
                       SizedBox(width: 12),
                       Text(
                         'Authenticate & Pay',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -186,7 +201,8 @@ class _PayQrScreenState extends ConsumerState<PayQrScreen> {
                     Navigator.pop(context);
                     _resumeScanner();
                   },
-                  child: const Text('Cancel', style: TextStyle(color: Colors.white54, fontSize: 16)),
+                  child: const Text('Cancel',
+                      style: TextStyle(color: Colors.white54, fontSize: 16)),
                 ),
               ),
             ],
@@ -205,24 +221,26 @@ class _PayQrScreenState extends ConsumerState<PayQrScreen> {
 
   Future<void> _authenticateAndPay(String qrPayload) async {
     _isPaying = true;
-    
+
     // 1. Biometric Authentication
     try {
       final bool canCheck = await _localAuth.canCheckBiometrics;
       final bool isSupported = await _localAuth.isDeviceSupported();
-      
+
       if (canCheck || isSupported) {
         final bool didAuthenticate = await _localAuth.authenticate(
           localizedReason: 'Scan fingerprint to authorize transaction',
           options: const AuthenticationOptions(
-            biometricOnly: false, // Fallback to PIN/pattern if biometric unavailable
+            biometricOnly:
+                false, // Fallback to PIN/pattern if biometric unavailable
             stickyAuth: true,
           ),
         );
-        
+
         if (!didAuthenticate) {
           _isPaying = false;
-          _showErrorDialog('Auth Required', 'Payment aborted. Biometric authorization is mandatory for security.');
+          _showErrorDialog('Auth Required',
+              'Payment aborted. Biometric authorization is mandatory for security.');
           return;
         }
       }
@@ -244,23 +262,26 @@ class _PayQrScreenState extends ConsumerState<PayQrScreen> {
       await ref.read(studentAccountProvider.notifier).payWithQr(qrPayload);
       if (!mounted) return;
       Navigator.pop(context); // close loading spinner
-      
+
       // Show gorgeous success overlay
       _showSuccessScreen();
     } catch (e) {
       if (!mounted) return;
       Navigator.pop(context); // close loading spinner
       _isPaying = false;
-      
+
       String errorMsg = e.toString();
       if (e is DioException) {
         final data = e.response?.data;
         if (data is Map) {
-          errorMsg = data['detail']?.toString() ?? data['message']?.toString() ?? errorMsg;
+          errorMsg = data['detail']?.toString() ??
+              data['message']?.toString() ??
+              errorMsg;
         }
       }
-      
-      _showErrorDialog('Payment Failed', errorMsg.replaceAll('Exception: ', ''));
+
+      _showErrorDialog(
+          'Payment Failed', errorMsg.replaceAll('Exception: ', ''));
     }
   }
 
@@ -322,7 +343,8 @@ class _PayQrScreenState extends ConsumerState<PayQrScreen> {
                       Navigator.pop(context); // Close dialog
                       context.go('/student'); // Return to dashboard
                     },
-                    child: const Text('Back to Dashboard', style: TextStyle(fontWeight: FontWeight.bold)),
+                    child: const Text('Back to Dashboard',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
                   ),
                 ),
               ],
@@ -347,7 +369,8 @@ class _PayQrScreenState extends ConsumerState<PayQrScreen> {
                 Navigator.pop(context);
                 _resumeScanner();
               },
-              child: const Text('OK', style: TextStyle(color: Color(0xFFBB86FC))),
+              child:
+                  const Text('OK', style: TextStyle(color: Color(0xFFBB86FC))),
             ),
           ],
         );
@@ -461,10 +484,12 @@ class QrScannerOverlayShape extends ShapeBorder {
     );
 
     // Dark screen overlay
-    final backgroundPaint = Paint()..color = Colors.black.withValues(alpha: 0.65);
+    final backgroundPaint = Paint()
+      ..color = Colors.black.withValues(alpha: 0.65);
     final backgroundPath = Path()
       ..addRect(rect)
-      ..addRRect(RRect.fromRectAndRadius(cutOutRect, Radius.circular(borderRadius)))
+      ..addRRect(
+          RRect.fromRectAndRadius(cutOutRect, Radius.circular(borderRadius)))
       ..fillType = PathFillType.evenOdd;
     canvas.drawPath(backgroundPath, backgroundPaint);
 

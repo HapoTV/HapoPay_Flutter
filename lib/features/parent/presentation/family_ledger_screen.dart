@@ -16,14 +16,17 @@ class FamilyLedgerScreen extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
-            onPressed: () => ref.read(studentAccountProvider.notifier).refresh(),
+            onPressed: () =>
+                ref.read(studentAccountProvider.notifier).refresh(),
           ),
         ],
       ),
       body: accountAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator(color: Color(0xFFBB86FC))),
+        loading: () => const Center(
+            child: CircularProgressIndicator(color: Color(0xFFBB86FC))),
         error: (err, _) => Center(
-          child: Text('Error loading transactions: $err', style: const TextStyle(color: Colors.red)),
+          child: Text('Error loading transactions: $err',
+              style: const TextStyle(color: Colors.red)),
         ),
         data: (account) {
           final txs = account.transactions;
@@ -44,7 +47,8 @@ class FamilyLedgerScreen extends ConsumerWidget {
             itemBuilder: (context, index) {
               final tx = txs[index];
               final isDebit = tx.type == 'debit';
-              final formattedTime = DateFormat('MMM d, h:mm a').format(tx.timestamp.toLocal());
+              final formattedTime =
+                  DateFormat('MMM d, h:mm a').format(tx.timestamp.toLocal());
 
               return Container(
                 padding: const EdgeInsets.all(16),
@@ -58,7 +62,9 @@ class FamilyLedgerScreen extends ConsumerWidget {
                     Container(
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        color: isDebit ? Colors.red.withValues(alpha: 0.12) : Colors.green.withValues(alpha: 0.12),
+                        color: isDebit
+                            ? Colors.red.withValues(alpha: 0.12)
+                            : Colors.green.withValues(alpha: 0.12),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
@@ -83,7 +89,8 @@ class FamilyLedgerScreen extends ConsumerWidget {
                           const SizedBox(height: 4),
                           Text(
                             formattedTime,
-                            style: const TextStyle(color: Colors.white54, fontSize: 12),
+                            style: const TextStyle(
+                                color: Colors.white54, fontSize: 12),
                           ),
                         ],
                       ),

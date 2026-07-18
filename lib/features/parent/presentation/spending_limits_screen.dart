@@ -6,7 +6,8 @@ class SpendingLimitsScreen extends ConsumerStatefulWidget {
   const SpendingLimitsScreen({super.key});
 
   @override
-  ConsumerState<SpendingLimitsScreen> createState() => _SpendingLimitsScreenState();
+  ConsumerState<SpendingLimitsScreen> createState() =>
+      _SpendingLimitsScreenState();
 }
 
 class _SpendingLimitsScreenState extends ConsumerState<SpendingLimitsScreen> {
@@ -30,7 +31,7 @@ class _SpendingLimitsScreenState extends ConsumerState<SpendingLimitsScreen> {
     try {
       final targetLimit = _isCardLocked ? 0.0 : _currentSliderValue;
       await ref.read(studentAccountProvider.notifier).updateLimit(targetLimit);
-      
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -67,9 +68,11 @@ class _SpendingLimitsScreenState extends ConsumerState<SpendingLimitsScreen> {
         title: const Text('Spending Controls'),
       ),
       body: accountAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator(color: Color(0xFFBB86FC))),
+        loading: () => const Center(
+            child: CircularProgressIndicator(color: Color(0xFFBB86FC))),
         error: (err, _) => Center(
-          child: Text('Error loading limits: $err', style: const TextStyle(color: Colors.red)),
+          child: Text('Error loading limits: $err',
+              style: const TextStyle(color: Colors.red)),
         ),
         data: (account) {
           _initializeState(account.dailyLimit);
@@ -99,7 +102,9 @@ class _SpendingLimitsScreenState extends ConsumerState<SpendingLimitsScreen> {
                         : const Color(0xFF1E1E1E),
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
-                      color: _isCardLocked ? Colors.redAccent.withValues(alpha: 0.4) : Colors.white10,
+                      color: _isCardLocked
+                          ? Colors.redAccent.withValues(alpha: 0.4)
+                          : Colors.white10,
                     ),
                   ),
                   child: Row(
@@ -114,7 +119,8 @@ class _SpendingLimitsScreenState extends ConsumerState<SpendingLimitsScreen> {
                         ),
                         child: Icon(
                           _isCardLocked ? Icons.lock : Icons.lock_open,
-                          color: _isCardLocked ? Colors.redAccent : Colors.white70,
+                          color:
+                              _isCardLocked ? Colors.redAccent : Colors.white70,
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -133,7 +139,8 @@ class _SpendingLimitsScreenState extends ConsumerState<SpendingLimitsScreen> {
                             SizedBox(height: 4),
                             Text(
                               'Suspend all payments immediately',
-                              style: TextStyle(color: Colors.white54, fontSize: 12),
+                              style: TextStyle(
+                                  color: Colors.white54, fontSize: 12),
                             ),
                           ],
                         ),
@@ -187,7 +194,8 @@ class _SpendingLimitsScreenState extends ConsumerState<SpendingLimitsScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text('Limit Value', style: TextStyle(color: Colors.white70)),
+                              const Text('Limit Value',
+                                  style: TextStyle(color: Colors.white70)),
                               Text(
                                 '\$${_currentSliderValue.toStringAsFixed(2)}',
                                 style: const TextStyle(
@@ -216,8 +224,12 @@ class _SpendingLimitsScreenState extends ConsumerState<SpendingLimitsScreen> {
                           const Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('\$5.00', style: TextStyle(color: Colors.white38, fontSize: 12)),
-                              Text('\$200.00', style: TextStyle(color: Colors.white38, fontSize: 12)),
+                              Text('\$5.00',
+                                  style: TextStyle(
+                                      color: Colors.white38, fontSize: 12)),
+                              Text('\$200.00',
+                                  style: TextStyle(
+                                      color: Colors.white38, fontSize: 12)),
                             ],
                           ),
                         ],
@@ -246,7 +258,8 @@ class _SpendingLimitsScreenState extends ConsumerState<SpendingLimitsScreen> {
                         ? const CircularProgressIndicator(color: Colors.white)
                         : const Text(
                             'Save Spending Controls',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                   ),
                 ),
