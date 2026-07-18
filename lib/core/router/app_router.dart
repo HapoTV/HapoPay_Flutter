@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:hapo_pay/features/auth/presentation/create_account_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/auth/presentation/login_screen.dart';
@@ -34,6 +35,10 @@ GoRouter appRouter(Ref ref) {
     },
     routes: [
       GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
+      GoRoute(
+        path: '/signUp',
+        builder: (context, state) => const CreateAccountScreen(),
+      ),
       GoRoute(
         path: '/parent',
         builder: (context, state) => const ParentDashboardScreen(),
