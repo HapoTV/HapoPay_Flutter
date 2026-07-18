@@ -9,50 +9,61 @@ import '../../features/student/presentation/rewards_screen.dart';
 import '../../features/auth/providers/auth_provider.dart';
 import '../../features/auth/models/user_model.dart';
 
-part 'app_router.g.dart';
+//part 'app_router.g.dart';
 
-@riverpod
-GoRouter appRouter(Ref ref) {
-  final authState = ref.watch(authProvider);
+// @riverpod
+// GoRouter appRouter(Ref ref) {
+//   final authState = ref.watch(authProvider);
 
-  return GoRouter(
-    initialLocation: '/login',
-    redirect: (context, state) {
-      final isLoggingIn = state.matchedLocation == '/login';
+//   return GoRouter(
+//     initialLocation: '/login',
+//     redirect: (context, state) {
+//       final isLoggingIn = state.matchedLocation == '/login';
 
-      if (authState.token == null) {
-        return '/login';
-      }
+//       // if (authState.token == null) {
+//       //   return '/login';
+//       // }
 
-      if (isLoggingIn) {
-        if (authState.user?.role == UserRole.parent) {
-          return '/parent';
-        }
-        return '/student';
-      }
+//       if (isLoggingIn) {
+//         if (authState.user?.role == UserRole.parent) {
+//           return '/parent';
+//         }
+//         return '/student';
+//       }
 
-      return null;
-    },
-    routes: [
-      GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
-      GoRoute(
-        path: '/signUp',
-        builder: (context, state) => const CreateAccountScreen(),
-      ),
-      GoRoute(
-        path: '/parent',
-        builder: (context, state) => const ParentDashboardScreen(),
-      ),
-      GoRoute(
-        path: '/student',
-        builder: (context, state) => const StudentDashboardScreen(),
-        routes: [
-          GoRoute(
-            path: 'rewards',
-            builder: (context, state) => const RewardsScreen(),
-          ),
-        ],
-      ),
-    ],
-  );
-}
+//       return null;
+//     },
+//     routes: [
+//       GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
+//       GoRoute(
+//         path: '/signUp',
+//         builder: (context, state) => const CreateAccountScreen(),
+//       ),
+//       GoRoute(
+//         path: '/parent',
+//         builder: (context, state) => const ParentDashboardScreen(),
+//       ),
+//       GoRoute(
+//         path: '/student',
+//         builder: (context, state) => const StudentDashboardScreen(),
+//         routes: [
+//           GoRoute(
+//             path: 'rewards',
+//             builder: (context, state) => const RewardsScreen(),
+//           ),
+//         ],
+//       ),
+//     ],
+//   );
+// }
+
+final router = GoRouter(
+  initialLocation: "/",
+  routes: [
+    GoRoute(path: '/', builder: (context, state) => const LoginScreen()),
+    GoRoute(
+      path: '/signUp',
+      builder: (context, state) => const CreateAccountScreen(),
+    ),
+  ],
+);

@@ -5,6 +5,6 @@ class CreateAccountScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Card());
+    return Scaffold(body: Center(child: const Text("Create an account!")));
   }
 }

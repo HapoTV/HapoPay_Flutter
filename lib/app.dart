@@ -8,7 +8,7 @@ class HapoPayApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final router = ref.watch(appRouterProvider);
+    //final router = ref.watch(appRouterProvider);
 
     return MaterialApp.router(
       title: 'HapoPay',

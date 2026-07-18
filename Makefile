@@ -1,4 +1,4 @@
-# Global variable to store device IP address
+`# Global variable to store device IP address
 DEVICE_IP_ADDRESS := $(shell adb shell ip route | grep -oE 'src ([0-9]+\.){3}[0-9]+' | cut -d' ' -f2)
 BRANCH_MAIN = main
 BRANCH_DEV = dev

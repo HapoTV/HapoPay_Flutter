@@ -205,26 +205,24 @@ class LoginScreen extends StatelessWidget {
             ),
           ),
           verticalSpaceMedium,
-          Text.rich(
-            TextSpan(
-              children: [
-                TextSpan(
-                  text: "Don't have an account? ",
-                  style: theme.textTheme.bodyMedium,
-                ),
-                TextSpan(
-                  text: "Create Account",
-                  style: theme.textTheme.labelLarge!.copyWith(
-                    color: theme.colorScheme.primary,
-                    fontWeight: FontWeight.bold,
+          TextButton(
+            onPressed: () => context.push("/signUp"),
+            child: Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(
+                    text: "Don't have an account? ",
+                    style: theme.textTheme.bodyMedium,
                   ),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      // Implement navigation to the registration screen
-                      context.push("/signUp");
-                    },
-                ),
-              ],
+                  TextSpan(
+                    text: "Create Account",
+                    style: theme.textTheme.labelLarge!.copyWith(
+                      color: theme.colorScheme.primary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
