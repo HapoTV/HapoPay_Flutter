@@ -8,6 +8,7 @@ class AppTheme {
   static const backgroundColor = Color(0xFF121212);
   static const surfaceColor = Color(0xFF1E1E1E);
   static const errorColor = Color(0xFFCF6679);
+  static const successColor = Color(0x1F4CAF50);
 
   // ---------------------------------------------------------------------------
   // Dark theme
@@ -25,6 +26,7 @@ class AppTheme {
       onSecondary: Colors.black,
       onSurface: Colors.white,
       onError: Colors.black,
+      onSurfaceVariant: successColor,
     ),
     scaffoldBackgroundColor: backgroundColor,
     textTheme: GoogleFonts.interTextTheme(ThemeData.dark().textTheme),

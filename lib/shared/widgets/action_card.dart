@@ -18,10 +18,11 @@ class ActionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      color: color ?? Theme.of(context).colorScheme.surface,
+      color: color ?? theme.colorScheme.surface,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(16),
@@ -32,13 +33,13 @@ class ActionCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: (color ?? Theme.of(context).colorScheme.primary)
+                  color: (color ?? theme.colorScheme.primary)
                       .withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
                   icon,
-                  color: color ?? Theme.of(context).colorScheme.primary,
+                  color: color ?? theme.colorScheme.primary,
                 ),
               ),
               const SizedBox(width: 16),
@@ -56,9 +57,8 @@ class ActionCard extends StatelessWidget {
                     Text(
                       subtitle,
                       style: TextStyle(
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.onSurface.withValues(alpha: 0.6),
+                        color:
+                            theme.colorScheme.onSurface.withValues(alpha: 0.6),
                       ),
                     ),
                   ],

@@ -6,21 +6,47 @@ part of 'student_account_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
+@ProviderFor(StudentAccount)
+final studentAccountProvider = StudentAccountProvider._();
+
+final class StudentAccountProvider
+    extends $AsyncNotifierProvider<StudentAccount, StudentAccountModel> {
+  StudentAccountProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'studentAccountProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$studentAccountHash();
+
+  @$internal
+  @override
+  StudentAccount create() => StudentAccount();
+}
+
 String _$studentAccountHash() => r'30a42b06906183d125bb42421459a253aa9ab829';
 
-/// See also [StudentAccount].
-@ProviderFor(StudentAccount)
-final studentAccountProvider = AutoDisposeAsyncNotifierProvider<StudentAccount,
-    StudentAccountModel>.internal(
-  StudentAccount.new,
-  name: r'studentAccountProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$studentAccountHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$StudentAccount = AutoDisposeAsyncNotifier<StudentAccountModel>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+abstract class _$StudentAccount extends $AsyncNotifier<StudentAccountModel> {
+  FutureOr<StudentAccountModel> build();
+  @$mustCallSuper
+  @override
+  WhenComplete runBuild() {
+    final ref =
+        this.ref as $Ref<AsyncValue<StudentAccountModel>, StudentAccountModel>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<AsyncValue<StudentAccountModel>, StudentAccountModel>,
+        AsyncValue<StudentAccountModel>,
+        Object?,
+        Object?>;
+    return element.handleCreate(ref, build);
+  }
+}

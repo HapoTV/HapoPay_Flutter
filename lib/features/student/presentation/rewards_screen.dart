@@ -4,6 +4,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hapopay/core/constants/constants.dart';
 import '../models/reward_model.dart';
 import '../providers/rewards_provider.dart';
 
@@ -84,11 +85,12 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen>
   @override
   Widget build(BuildContext context) {
     final rewardsAsync = ref.watch(rewardsProvider);
+    final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: const Color(0xFF121212),
+      backgroundColor: theme.colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF1E1E1E),
+        //backgroundColor: const Color(0xFF1E1E1E),
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
@@ -215,6 +217,7 @@ class _HeroCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final gradientColors =
         _tierGradients[reward.tier] ?? [Colors.purple, Colors.purpleAccent];
     final progress = reward.tierProgressFraction;
@@ -259,11 +262,11 @@ class _HeroCard extends StatelessWidget {
                       reward.tier.badge,
                       style: const TextStyle(fontSize: 16),
                     ),
-                    const SizedBox(width: 6),
+                    horizontalSpaceTiny,
                     Text(
                       reward.tier.label,
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style: TextStyle(
+                        color: theme.colorScheme.onSurface,
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
                       ),
@@ -292,8 +295,8 @@ class _HeroCard extends StatelessWidget {
                       const SizedBox(width: 4),
                       Text(
                         '${reward.streakDays}-day streak',
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: TextStyle(
+                          color: theme.colorScheme.onSurface,
                           fontWeight: FontWeight.w600,
                           fontSize: 13,
                         ),
@@ -304,38 +307,38 @@ class _HeroCard extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 24),
+          verticalSpaceLarge,
 
           // Points display
-          const Text(
+          Text(
             'Total Points',
             style: TextStyle(
-              color: Colors.white70,
+              color: theme.colorScheme.onSurface,
               fontSize: 13,
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: 4),
+          verticalSpaceTiny,
           Text(
             '${reward.totalPoints}',
-            style: const TextStyle(
-              color: Colors.white,
+            style: TextStyle(
+              color: theme.colorScheme.onSurface,
               fontSize: 48,
               fontWeight: FontWeight.w900,
               height: 1,
             ),
           ),
-          const SizedBox(height: 4),
+          verticalSpaceTiny,
           Text(
             'pts',
             style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.7),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
               fontSize: 16,
               fontWeight: FontWeight.w500,
             ),
           ),
 
-          const SizedBox(height: 24),
+          verticalSpaceLarge,
 
           // Progress bar toward next tier
           Column(
@@ -348,19 +351,20 @@ class _HeroCard extends StatelessWidget {
                     nextPoints != null
                         ? 'Next tier in ${nextPoints - reward.totalPoints} pts'
                         : '🏆 Max tier reached!',
-                    style: const TextStyle(color: Colors.white70, fontSize: 12),
+                    style: TextStyle(
+                        color: theme.colorScheme.onSurface, fontSize: 12),
                   ),
                   Text(
                     '${(progress * 100).toInt()}%',
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style: TextStyle(
+                      color: theme.colorScheme.onSurface,
                       fontWeight: FontWeight.bold,
                       fontSize: 12,
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
+              verticalSpaceSmall,
               _AnimatedProgressBar(
                 value: progress,
                 backgroundColor: Colors.white24,

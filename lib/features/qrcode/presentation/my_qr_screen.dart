@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hapopay/core/constants/constants.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import '../../auth/providers/auth_provider.dart';
 
@@ -36,7 +37,8 @@ class _MyQrScreenState extends ConsumerState<MyQrScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(authProvider.select((s) => s.user));
+    final theme = Theme.of(context);
+    final user = ref.watch(authProvider).user;
     final studentId = user?.id ?? 'student_123';
     final studentName = user?.fullName ?? 'Demo Student';
 
@@ -52,24 +54,25 @@ class _MyQrScreenState extends ConsumerState<MyQrScreen> {
               'Receive Payments & Allowances',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 8),
-            const Text(
+            verticalSpaceSmall,
+            Text(
               'Show this QR code to a parent or merchant to request money.',
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white70, fontSize: 14),
+              style:
+                  TextStyle(color: theme.colorScheme.onSurface, fontSize: 14),
             ),
-            const SizedBox(height: 32),
+            verticalSpaceSmall,
 
             // Dynamic QR Code Container with nice aesthetic styling
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: Colors
-                    .white, // QR code needs a white background for scanners to detect it easily
+                color: theme.colorScheme
+                    .onSurface, // QR code needs a white background for scanners to detect it easily
                 borderRadius: BorderRadius.circular(24),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF6200EE).withValues(alpha: 0.2),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.2),
                     blurRadius: 20,
                     spreadRadius: 2,
                   ),
@@ -82,29 +85,29 @@ class _MyQrScreenState extends ConsumerState<MyQrScreen> {
                     version: QrVersions.auto,
                     size: 200.0,
                     gapless: false,
-                    eyeStyle: const QrEyeStyle(
+                    eyeStyle: QrEyeStyle(
                       eyeShape: QrEyeShape.square,
-                      color: Color(0xFF121212),
+                      color: theme.colorScheme.onSurface,
                     ),
-                    dataModuleStyle: const QrDataModuleStyle(
+                    dataModuleStyle: QrDataModuleStyle(
                       dataModuleShape: QrDataModuleShape.square,
-                      color: Color(0xFF121212),
+                      color: theme.colorScheme.onSurface,
                     ),
                   ),
                   const SizedBox(height: 16),
                   Text(
                     studentName,
-                    style: const TextStyle(
-                      color: Color(0xFF121212),
+                    style: TextStyle(
+                      color: theme.colorScheme.onSurface,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  const Text(
+                  verticalSpaceTiny,
+                  Text(
                     'Scan to pay HapoPay user',
                     style: TextStyle(
-                      color: Colors.black54,
+                      color: theme.colorScheme.onError,
                       fontSize: 12,
                     ),
                   ),
@@ -112,11 +115,11 @@ class _MyQrScreenState extends ConsumerState<MyQrScreen> {
               ),
             ),
 
-            const SizedBox(height: 32),
+            verticalSpaceXXLarge,
 
             // Form Fields to dynamically update QR details
             Card(
-              color: const Color(0xFF1E1E1E),
+              color: theme.colorScheme.onError,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
@@ -125,12 +128,12 @@ class _MyQrScreenState extends ConsumerState<MyQrScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Request Details',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: theme.colorScheme.onSurface,
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -144,10 +147,11 @@ class _MyQrScreenState extends ConsumerState<MyQrScreen> {
                         border: OutlineInputBorder(),
                       ),
                       onChanged: (val) {
+                        //TODO: Change the state manager to riverpod
                         setState(() {});
                       },
                     ),
-                    const SizedBox(height: 16),
+                    verticalSpaceMedium,
                     TextField(
                       controller: _descController,
                       decoration: const InputDecoration(

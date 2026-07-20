@@ -15,6 +15,7 @@ class HapoPayApp extends ConsumerWidget {
       title: 'HapoPay',
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
+      themeMode: ThemeMode.system,
       routerConfig: router,
       debugShowCheckedModeBanner: false,
     );

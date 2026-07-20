@@ -21,7 +21,7 @@ class Rewards extends _$Rewards {
   Future<RewardModel> build() async {
     // Derive student ID from authenticated user; fall back to 'demo' so the
     // UI always renders during development.
-    final user = ref.watch(authProvider.select((s) => s.user));
+    final user = ref.watch(authProvider).user;
     final studentId = user?.id ?? '';
     return ref.read(rewardsRepositoryProvider).fetchRewards(studentId);
   }
@@ -54,7 +54,7 @@ class Rewards extends _$Rewards {
 
     // Confirm with backend; on error roll back.
     try {
-      final user = ref.read(authProvider.select((s) => s.user));
+      final user = ref.read(authProvider).user;
       final studentId = user?.id ?? 'demo';
       final updated = await ref
           .read(rewardsRepositoryProvider)
@@ -67,7 +67,7 @@ class Rewards extends _$Rewards {
   }
 
   Future<RewardModel> _fetch() async {
-    final user = ref.read(authProvider.select((s) => s.user));
+    final user = ref.read(authProvider).user;
     final studentId = user?.id ?? '';
     return ref.read(rewardsRepositoryProvider).fetchRewards(studentId);
   }
@@ -79,5 +79,5 @@ class Rewards extends _$Rewards {
 
 @riverpod
 int earnedAchievementsCount(Ref ref) {
-  return ref.watch(rewardsProvider).valueOrNull?.earnedAchievementsCount ?? 0;
+  return ref.watch(rewardsProvider).value?.earnedAchievementsCount ?? 0;
 }

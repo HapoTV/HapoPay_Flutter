@@ -21,7 +21,7 @@ import '../../features/qrcode/presentation/qrcode.dart';
 /// GoRouter to re-evaluate the [redirect] function without recreating
 /// the [GoRouter] instance.
 class _RouterRefreshNotifier extends ChangeNotifier {
-  _RouterRefreshNotifier(Ref<GoRouter> ref) {
+  _RouterRefreshNotifier(Ref ref) {
     ref.listen<AuthState>(authProvider, (_, __) => notifyListeners());
   }
 }

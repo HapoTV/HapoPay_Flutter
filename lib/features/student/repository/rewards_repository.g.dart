@@ -6,23 +6,48 @@ part of 'rewards_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$rewardsRepositoryHash() => r'89d242b4c6d2c9da591cc1fe3111d2587e4bd5d9';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [rewardsRepository].
 @ProviderFor(rewardsRepository)
-final rewardsRepositoryProvider =
-    AutoDisposeProvider<RewardsRepository>.internal(
-  rewardsRepository,
-  name: r'rewardsRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$rewardsRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+final rewardsRepositoryProvider = RewardsRepositoryProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef RewardsRepositoryRef = AutoDisposeProviderRef<RewardsRepository>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class RewardsRepositoryProvider extends $FunctionalProvider<
+    RewardsRepository,
+    RewardsRepository,
+    RewardsRepository> with $Provider<RewardsRepository> {
+  RewardsRepositoryProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'rewardsRepositoryProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$rewardsRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<RewardsRepository> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  RewardsRepository create(Ref ref) {
+    return rewardsRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(RewardsRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<RewardsRepository>(value),
+    );
+  }
+}
+
+String _$rewardsRepositoryHash() => r'89d242b4c6d2c9da591cc1fe3111d2587e4bd5d9';

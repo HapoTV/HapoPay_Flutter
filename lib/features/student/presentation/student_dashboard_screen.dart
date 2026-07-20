@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hapopay/core/constants/constants.dart';
 import '../../../shared/widgets/action_card.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../providers/rewards_provider.dart';
@@ -22,8 +23,9 @@ class StudentDashboardScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(authProvider.select((s) => s.user));
+    final user = ref.watch(authProvider).user;
     final accountAsync = ref.watch(studentAccountProvider);
+    final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -31,6 +33,7 @@ class StudentDashboardScreen extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
+            color: theme.colorScheme.onSurface,
             onPressed: () => ref.read(authProvider.notifier).logout(),
           ),
         ],
@@ -45,11 +48,11 @@ class StudentDashboardScreen extends ConsumerWidget {
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-            const Text(
+            Text(
               'Ready to make a payment?',
-              style: TextStyle(color: Colors.white70),
+              style: TextStyle(color: theme.colorScheme.onSurface),
             ),
-            const SizedBox(height: 32),
+            verticalSpaceXXLarge,
 
             // ── Balance card ──────────────────────────────────────────────
             Container(
@@ -64,16 +67,18 @@ class StudentDashboardScreen extends ConsumerWidget {
               ),
               child: Column(
                 children: [
-                  const Text(
+                  Text(
                     'Available Balance',
-                    style: TextStyle(color: Colors.white, fontSize: 16),
+                    style: TextStyle(
+                        color: theme.colorScheme.onSurface, fontSize: 16),
                   ),
-                  const SizedBox(height: 8),
+                  verticalSpaceSmall,
                   accountAsync.when(
-                    loading: () => const SizedBox(
+                    loading: () => SizedBox(
                       height: 86,
                       child: Center(
-                        child: CircularProgressIndicator(color: Colors.white),
+                        child: CircularProgressIndicator(
+                            color: theme.colorScheme.onSurface),
                       ),
                     ),
                     error: (err, _) => SizedBox(
@@ -81,8 +86,8 @@ class StudentDashboardScreen extends ConsumerWidget {
                       child: Center(
                         child: Text(
                           'Error loading balance',
-                          style:
-                              TextStyle(color: Colors.red[100], fontSize: 14),
+                          style: TextStyle(
+                              color: theme.colorScheme.error, fontSize: 14),
                         ),
                       ),
                     ),
@@ -90,13 +95,13 @@ class StudentDashboardScreen extends ConsumerWidget {
                       children: [
                         Text(
                           '\$${account.balance.toStringAsFixed(2)}',
-                          style: const TextStyle(
-                            color: Colors.white,
+                          style: TextStyle(
+                            color: theme.colorScheme.onSurface,
                             fontSize: 36,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 24),
+                        verticalSpaceLarge,
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
@@ -121,7 +126,7 @@ class StudentDashboardScreen extends ConsumerWidget {
               ),
             ),
 
-            const SizedBox(height: 32),
+            verticalSpaceXXLarge,
 
             // ── Action cards ──────────────────────────────────────────────
             ActionCard(
@@ -160,6 +165,7 @@ class _RewardsSummaryCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final rewardsAsync = ref.watch(rewardsProvider);
+    final theme = Theme.of(context);
 
     return rewardsAsync.when(
       // While loading, show a shimmering placeholder that matches the card shape
@@ -181,23 +187,24 @@ class _RewardsSummaryCard extends ConsumerWidget {
                 size: 24,
               ),
             ),
-            const SizedBox(width: 16),
-            const Expanded(
+            verticalSpaceMedium,
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Rewards',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   Text(
                     'Tap to view your achievements',
-                    style: TextStyle(color: Colors.white54, fontSize: 13),
+                    style: TextStyle(
+                        color: theme.colorScheme.onSurface, fontSize: 13),
                   ),
                 ],
               ),
             ),
-            const Icon(Icons.chevron_right, color: Colors.white54),
+            Icon(Icons.chevron_right, color: theme.colorScheme.onSurface),
           ],
         ),
       ),
@@ -402,6 +409,7 @@ class _BalanceInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Column(
       children: [
         Text(
@@ -410,8 +418,8 @@ class _BalanceInfo extends StatelessWidget {
         ),
         Text(
           value,
-          style: const TextStyle(
-            color: Colors.white,
+          style: TextStyle(
+            color: theme.colorScheme.onSurface,
             fontWeight: FontWeight.bold,
           ),
         ),

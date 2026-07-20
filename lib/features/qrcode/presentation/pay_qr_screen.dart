@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hapopay/core/constants/constants.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import '../../student/providers/student_account_provider.dart';
@@ -98,6 +99,7 @@ class _PayQrScreenState extends ConsumerState<PayQrScreen> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
       ),
       builder: (context) {
+        final theme = Theme.of(context);
         return Padding(
           padding: EdgeInsets.fromLTRB(
               24, 24, 24, MediaQuery.of(context).viewInsets.bottom + 24),
@@ -108,67 +110,67 @@ class _PayQrScreenState extends ConsumerState<PayQrScreen> {
                 width: 48,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: Colors.white24,
+                  color: theme.colorScheme.onSurface,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
-              const SizedBox(height: 24),
-              const Text(
+              verticalSpaceLarge,
+              Text(
                 'Confirm Payment',
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white),
+                    color: theme.colorScheme.onSurface),
               ),
-              const SizedBox(height: 32),
+              verticalSpaceXXLarge,
               // Transaction details box
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.05),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.05),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.white12),
+                  border: Border.all(color: theme.colorScheme.onSurface),
                 ),
                 child: Column(
                   children: [
                     Text(
                       '\$${amount.toStringAsFixed(2)}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 40,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: theme.colorScheme.onSurface,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    verticalSpaceSmall,
                     Text(
                       'to $recipient',
-                      style:
-                          const TextStyle(fontSize: 16, color: Colors.white70),
+                      style: TextStyle(
+                          fontSize: 16, color: theme.colorScheme.onSurface),
                     ),
-                    const Divider(height: 32, color: Colors.white12),
+                    Divider(height: 32, color: theme.colorScheme.surface),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('Purpose',
-                            style: TextStyle(color: Colors.white54)),
+                        Text('Purpose',
+                            style: TextStyle(color: theme.colorScheme.surface)),
                         Text(description,
-                            style: const TextStyle(
-                                color: Colors.white,
+                            style: TextStyle(
+                                color: theme.colorScheme.onSurface,
                                 fontWeight: FontWeight.w500)),
                       ],
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 32),
+              verticalSpaceXXLarge,
               // Glowing confirm button
               SizedBox(
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF6200EE),
-                    foregroundColor: Colors.white,
+                    backgroundColor: theme.colorScheme.primary,
+                    foregroundColor: theme.colorScheme.onSurface,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
@@ -201,8 +203,11 @@ class _PayQrScreenState extends ConsumerState<PayQrScreen> {
                     Navigator.pop(context);
                     _resumeScanner();
                   },
-                  child: const Text('Cancel',
-                      style: TextStyle(color: Colors.white54, fontSize: 16)),
+                  child: Text('Cancel',
+                      style: TextStyle(
+                          color: theme.colorScheme.onSurface
+                              .withAlpha(Colors.white54 as int),
+                          fontSize: 16)),
                 ),
               ),
             ],
@@ -230,11 +235,7 @@ class _PayQrScreenState extends ConsumerState<PayQrScreen> {
       if (canCheck || isSupported) {
         final bool didAuthenticate = await _localAuth.authenticate(
           localizedReason: 'Scan fingerprint to authorize transaction',
-          options: const AuthenticationOptions(
-            biometricOnly:
-                false, // Fallback to PIN/pattern if biometric unavailable
-            stickyAuth: true,
-          ),
+          biometricOnly: false,
         );
 
         if (!didAuthenticate) {
@@ -290,8 +291,10 @@ class _PayQrScreenState extends ConsumerState<PayQrScreen> {
       context: context,
       barrierDismissible: false,
       builder: (context) {
+        final theme = Theme.of(context);
+
         return Dialog(
-          backgroundColor: const Color(0xFF1E1E1E),
+          backgroundColor: theme.colorScheme.surface,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(24),
           ),
@@ -302,39 +305,39 @@ class _PayQrScreenState extends ConsumerState<PayQrScreen> {
               children: [
                 Container(
                   padding: const EdgeInsets.all(16),
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF1B5E20),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.secondary,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.check,
-                    color: Color(0xFF81C784),
+                    color: theme.colorScheme.secondary,
                     size: 48,
                   ),
                 ),
-                const SizedBox(height: 24),
-                const Text(
+                verticalSpaceLarge,
+                Text(
                   'Payment Successful',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: theme.colorScheme.onSurface,
                   ),
                 ),
-                const SizedBox(height: 12),
-                const Text(
+                verticalSpaceSmall,
+                Text(
                   'Your transaction has been securely processed and recorded.',
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.white70),
+                  style: TextStyle(color: theme.colorScheme.secondary),
                 ),
-                const SizedBox(height: 32),
+                verticalSpaceXXLarge,
                 SizedBox(
                   width: double.infinity,
                   height: 48,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF6200EE),
-                      foregroundColor: Colors.white,
+                      backgroundColor: theme.colorScheme.primary,
+                      foregroundColor: theme.colorScheme.surface,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -388,6 +391,7 @@ class _PayQrScreenState extends ConsumerState<PayQrScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Scan QR Code'),
@@ -403,9 +407,9 @@ class _PayQrScreenState extends ConsumerState<PayQrScreen> {
           // High-end UI overlay (scanning target layout)
           Positioned.fill(
             child: Container(
-              decoration: const ShapeDecoration(
+              decoration: ShapeDecoration(
                 shape: QrScannerOverlayShape(
-                  borderColor: Color(0xFFBB86FC),
+                  borderColor: theme.colorScheme.primary,
                   borderRadius: 16,
                   borderLength: 30,
                   borderWidth: 6,
@@ -423,14 +427,14 @@ class _PayQrScreenState extends ConsumerState<PayQrScreen> {
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
               decoration: BoxDecoration(
-                color: Colors.black.withValues(alpha: 0.6),
+                color: theme.colorScheme.surface.withValues(alpha: 0.6),
                 borderRadius: BorderRadius.circular(30),
               ),
-              child: const Text(
+              child: Text(
                 'Align the merchant QR code within the frame',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: theme.colorScheme.onSurface,
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                 ),

@@ -10,7 +10,7 @@ class StudentAccount extends _$StudentAccount {
   @override
   Future<StudentAccountModel> build() async {
     // Watch user changes so that logging in/out refreshes the account state
-    final user = ref.watch(authProvider.select((s) => s.user));
+    final user = ref.watch(authProvider).user;
     final studentId = user?.id ?? 'student_123';
     return ref.read(studentAccountRepositoryProvider).fetchAccount(studentId);
   }
@@ -22,7 +22,7 @@ class StudentAccount extends _$StudentAccount {
 
   /// Processes payment using scanned QR payload
   Future<void> payWithQr(String qrPayload) async {
-    final user = ref.read(authProvider.select((s) => s.user));
+    final user = ref.read(authProvider).user;
     final studentId = user?.id ?? 'student_123';
 
     // We get the new account state back upon success
@@ -34,7 +34,7 @@ class StudentAccount extends _$StudentAccount {
 
   /// Updates spending limits (used by parent view)
   Future<void> updateLimit(double limit) async {
-    final user = ref.read(authProvider.select((s) => s.user));
+    final user = ref.read(authProvider).user;
     final studentId = user?.id ?? 'student_123';
 
     final newAccount = await ref
@@ -44,7 +44,7 @@ class StudentAccount extends _$StudentAccount {
   }
 
   Future<StudentAccountModel> _fetch() async {
-    final user = ref.read(authProvider.select((s) => s.user));
+    final user = ref.read(authProvider).user;
     final studentId = user?.id ?? 'student_123';
     return ref.read(studentAccountRepositoryProvider).fetchAccount(studentId);
   }

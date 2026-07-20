@@ -6,38 +6,87 @@ part of 'rewards_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$earnedAchievementsCountHash() =>
-    r'c20b9bce66b493cad05a754971acf2c191271044';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [earnedAchievementsCount].
-@ProviderFor(earnedAchievementsCount)
-final earnedAchievementsCountProvider = AutoDisposeProvider<int>.internal(
-  earnedAchievementsCount,
-  name: r'earnedAchievementsCountProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$earnedAchievementsCountHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+@ProviderFor(Rewards)
+final rewardsProvider = RewardsProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef EarnedAchievementsCountRef = AutoDisposeProviderRef<int>;
+final class RewardsProvider
+    extends $AsyncNotifierProvider<Rewards, RewardModel> {
+  RewardsProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'rewardsProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$rewardsHash();
+
+  @$internal
+  @override
+  Rewards create() => Rewards();
+}
+
 String _$rewardsHash() => r'442aaea883925ee036722c6a8bb1ab154ddc8b4f';
 
-/// See also [Rewards].
-@ProviderFor(Rewards)
-final rewardsProvider =
-    AutoDisposeAsyncNotifierProvider<Rewards, RewardModel>.internal(
-  Rewards.new,
-  name: r'rewardsProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$rewardsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+abstract class _$Rewards extends $AsyncNotifier<RewardModel> {
+  FutureOr<RewardModel> build();
+  @$mustCallSuper
+  @override
+  WhenComplete runBuild() {
+    final ref = this.ref as $Ref<AsyncValue<RewardModel>, RewardModel>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<AsyncValue<RewardModel>, RewardModel>,
+        AsyncValue<RewardModel>,
+        Object?,
+        Object?>;
+    return element.handleCreate(ref, build);
+  }
+}
 
-typedef _$Rewards = AutoDisposeAsyncNotifier<RewardModel>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+@ProviderFor(earnedAchievementsCount)
+final earnedAchievementsCountProvider = EarnedAchievementsCountProvider._();
+
+final class EarnedAchievementsCountProvider
+    extends $FunctionalProvider<int, int, int> with $Provider<int> {
+  EarnedAchievementsCountProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'earnedAchievementsCountProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$earnedAchievementsCountHash();
+
+  @$internal
+  @override
+  $ProviderElement<int> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  int create(Ref ref) {
+    return earnedAchievementsCount(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(int value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<int>(value),
+    );
+  }
+}
+
+String _$earnedAchievementsCountHash() =>
+    r'c20b9bce66b493cad05a754971acf2c191271044';

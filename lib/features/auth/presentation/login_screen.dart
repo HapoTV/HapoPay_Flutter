@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hapopay/core/constants/constants.dart';
 
 import '../providers/auth_provider.dart'; // re-exports authProvider, AppUser, UserRole
 
@@ -43,7 +44,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = ref.watch(authProvider.select((s) => s.isLoading));
+    final theme = Theme.of(context);
+    final isLoading = ref.watch(authProvider).isLoading;
 
     return Scaffold(
       body: SafeArea(
@@ -53,30 +55,30 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Icon(
+              Icon(
                 Icons.account_balance_wallet,
                 size: 80,
-                color: Color(0xFFBB86FC),
+                color: theme.colorScheme.primary,
               ),
-              const SizedBox(height: 32),
+              verticalSpaceXXLarge,
               const Text(
                 'Welcome to HapoPay',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 40),
+              verticalSpaceXIVLLarge,
               TextField(
                 controller: _emailController,
-                decoration: const InputDecoration(labelText: 'Email'),
+                decoration: InputDecoration(labelText: 'Email', labelStyle: TextStyle(color: theme.colorScheme.onSurface)),
                 keyboardType: TextInputType.emailAddress,
               ),
-              const SizedBox(height: 16),
+              verticalSpaceMedium,
               TextField(
                 controller: _passwordController,
-                decoration: const InputDecoration(labelText: 'Password'),
+                decoration:  InputDecoration(labelText: 'Password', labelStyle: TextStyle(color: theme.colorScheme.onSurface)),
                 obscureText: true,
               ),
-              const SizedBox(height: 32),
+              verticalSpaceXXLarge,
               ElevatedButton(
                 onPressed: isLoading ? null : _onLogin,
                 child: isLoading
