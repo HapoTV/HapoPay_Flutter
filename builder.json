@@ -1,0 +1,22 @@
+{
+  "project": "hapopay",
+  "platform": "ios",
+  "github": {
+    "owner": "Pak-Man926",
+    "repo": "HapoPay_Flutter"
+  },
+  "provider": "github",
+  "codemagic": {},
+  "bitrise": {},
+  "ios": {
+    "path": "ios",
+    "bundleId": "com.hapopay.hapoPay"
+  },
+  "flutter": {
+    "version": "3.47.4",
+    "watch": {}
+  },
+  "reactNative": {},
+  "kmp": {},
+  "mobai": {}
+}
