@@ -82,10 +82,42 @@ class ParentFixtures {
 
   static Map<String, dynamic> ledgerJson() => {
     'transactions': [
-      _txn('Amara', 'School Canteen', -4.50, 'Today', '12:30', '🍔', 'approved'),
-      _txn('Kwame', 'Stationery World', -12.00, 'Today', '10:15', '📚', 'approved'),
-      _txn('Amara', 'Weekly Allowance', 50.00, 'Today', '9:00', '💸', 'approved'),
-      _txn('Kwame', 'Weekly Allowance', 30.00, 'Today', '9:00', '💸', 'approved'),
+      _txn(
+        'Amara',
+        'School Canteen',
+        -4.50,
+        'Today',
+        '12:30',
+        '🍔',
+        'approved',
+      ),
+      _txn(
+        'Kwame',
+        'Stationery World',
+        -12.00,
+        'Today',
+        '10:15',
+        '📚',
+        'approved',
+      ),
+      _txn(
+        'Amara',
+        'Weekly Allowance',
+        50.00,
+        'Today',
+        '9:00',
+        '💸',
+        'approved',
+      ),
+      _txn(
+        'Kwame',
+        'Weekly Allowance',
+        30.00,
+        'Today',
+        '9:00',
+        '💸',
+        'approved',
+      ),
       _txn('Kwame', 'Game Shop', -18.00, 'Yesterday', '16:20', '🎮', 'flagged'),
       _txn('Amara', 'Bus Pass', -15.00, 'Mon', '7:45', '🚌', 'approved'),
       _txn('Amara', 'Health Clinic', -8.00, 'Mon', '14:00', '🏥', 'approved'),
@@ -112,5 +144,4 @@ class ParentFixtures {
     'cat': cat,
     'status': status,
   };
-
 }

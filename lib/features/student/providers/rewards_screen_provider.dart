@@ -66,7 +66,9 @@ class RewardsScreenNotifier extends Notifier<RewardsScreenState> {
   RewardsScreenState build() {
     final reward = ref.watch(rewardsProvider).asData?.value;
     if (reward == null) {
-      return RewardsScreenState.fromReward(RewardModel.demo(studentId: 'student_123'));
+      return RewardsScreenState.fromReward(
+        RewardModel.demo(studentId: 'student_123'),
+      );
     }
     return RewardsScreenState.fromReward(reward);
   }

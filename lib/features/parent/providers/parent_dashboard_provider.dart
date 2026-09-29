@@ -129,7 +129,9 @@ class ParentDashboardNotifier extends Notifier<ParentDashboardState> {
   }
 
   ParentDashboardState _seed() {
-    final parsed = ParentCatalog.dashboardFromJson(ParentCatalog.dashboardJson());
+    final parsed = ParentCatalog.dashboardFromJson(
+      ParentCatalog.dashboardJson(),
+    );
     return ParentDashboardState(
       familyBalance: parsed.familyBalance,
       addedThisWeek: parsed.addedThisWeek,

@@ -51,20 +51,18 @@ class ParentCatalog {
   }
 
   static List<TxnRecord> ledgerFromJson(Map<String, dynamic> json) {
-    return (json['transactions'] as List<dynamic>? ?? [])
-        .map((raw) {
-          final map = raw as Map<String, dynamic>;
-          return TxnRecord(
-            child: map['child'] as String? ?? '',
-            merchant: map['merchant'] as String? ?? '',
-            amount: (map['amount'] as num? ?? 0).toDouble(),
-            date: map['date'] as String? ?? '',
-            time: map['time'] as String? ?? '',
-            cat: map['cat'] as String? ?? '',
-            status: map['status'] as String? ?? 'approved',
-          );
-        })
-        .toList();
+    return (json['transactions'] as List<dynamic>? ?? []).map((raw) {
+      final map = raw as Map<String, dynamic>;
+      return TxnRecord(
+        child: map['child'] as String? ?? '',
+        merchant: map['merchant'] as String? ?? '',
+        amount: (map['amount'] as num? ?? 0).toDouble(),
+        date: map['date'] as String? ?? '',
+        time: map['time'] as String? ?? '',
+        cat: map['cat'] as String? ?? '',
+        status: map['status'] as String? ?? 'approved',
+      );
+    }).toList();
   }
 
   static ChildProfile _child(Map<String, dynamic> json) {
