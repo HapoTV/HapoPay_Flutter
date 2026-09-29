@@ -671,9 +671,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                     );
                                     if (!context.mounted) return;
                                     // 4. Success feedback to user
-                                    ScaffoldMessenger.of(
-                                      context,
-                                    ).showSnackBar(
+                                    ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                         content: Text(
                                           'Text copied to clipboard!',
