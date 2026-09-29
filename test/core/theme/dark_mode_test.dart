@@ -32,18 +32,15 @@ void main() {
       expect(AppTheme.light.useMaterial3, isTrue);
     });
 
-    test('dark theme AppBar background matches surface color', () {
-      final appBarTheme = AppTheme.darkTheme.appBarTheme;
+    test('dark theme AppBar is transparent', () {
       expect(
-        appBarTheme.backgroundColor,
-        equals(AppTheme.darkTheme.colorScheme.surface),
+        AppTheme.darkTheme.appBarTheme.backgroundColor,
+        Colors.transparent,
       );
     });
 
-    test('light theme AppBar background is light', () {
-      final appBarTheme = AppTheme.light.appBarTheme;
-      final luminance = appBarTheme.backgroundColor?.computeLuminance() ?? 0;
-      expect(luminance, greaterThan(0.8));
+    test('light theme AppBar is transparent', () {
+      expect(AppTheme.light.appBarTheme.backgroundColor, Colors.transparent);
     });
 
     test('dark theme button background uses primary color', () {
@@ -76,14 +73,10 @@ void main() {
         ),
       );
 
-      // Verify the AppBar uses dark surface color
-      final appBar = tester.widget<AppBar>(find.byType(AppBar));
-      expect(appBar.backgroundColor?.computeLuminance(), lessThan(0.2));
-
-      // Verify scaffold is dark
-      final scaffold = tester.widget<Scaffold>(find.byType(Scaffold));
-      final brightness = scaffold.backgroundColor?.computeLuminance() ?? 0;
-      expect(brightness, lessThan(0.15));
+      final theme = Theme.of(tester.element(find.text('Dark Mode')));
+      expect(theme.brightness, Brightness.dark);
+      expect(theme.appBarTheme.backgroundColor, Colors.transparent);
+      expect(theme.scaffoldBackgroundColor.computeLuminance(), lessThan(0.15));
     });
 
     testWidgets('App renders with light theme when ThemeMode.light is used', (

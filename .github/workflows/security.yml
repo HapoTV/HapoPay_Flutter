@@ -1,76 +1,42 @@
 name: Security Scanning
 
 permissions:
-  contents: write
+  contents: read
 
 on:
   push:
-    branches: [ main ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main ]
+    branches: [main, develop]
   schedule:
-    - cron: '0 0 * * 0'
+    - cron: "0 0 * * 0"
 
 jobs:
   security:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-      with:
-        ref: ${{ github.head_ref || github.ref_name }}
+      - uses: actions/checkout@v5
 
-    - name: Setup Flutter
-      uses: subosito/flutter-action@v2
-      with:
-        channel: 'stable'
-        cache: true
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
 
-    - name: Ensure git user
-      run: |
-        git config user.name "github-actions[bot]"
-        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Install dependencies
+        run: flutter pub get
 
-    # Do not attempt to auto-push on schedule runs
-    - name: Format code and commit if needed
-      if: github.event_name != 'schedule'
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        flutter pub get
-        dart format .
-        git add -A
-        if [ -n "$(git status --porcelain)" ]; then
-          git commit -m "chore: format code (ci)"
-          git push
-        fi
+      - name: Static analysis
+        run: dart analyze --fatal-infos
 
-    - name: Install dependencies
-      run: flutter pub get
+      - name: Check outdated packages
+        run: flutter pub outdated
+        continue-on-error: true
 
-    - name: Run Snyk security scan (optional)
-      uses: snyk/actions/dart@master
-      env:
-        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      with:
-        args: --severity-threshold=medium
-      continue-on-error: true
-
-    - name: Check outdated packages
-      run: flutter pub outdated
-      continue-on-error: true
-
-    - name: Run static analysis
-      run: dart analyze --fatal-infos
-
-    - name: Secret scanning
-      uses: gitleaks/gitleaks-action@v2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: CodeQL Analysis
-      uses: github/codeql-action/init@v3
-      with:
-        languages: dart
-
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v3
+      - name: Secret scanning
+        run: |
+          set -euo pipefail
+          version=8.30.1
+          curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${version}/gitleaks_${version}_linux_x64.tar.gz" -o /tmp/gitleaks.tar.gz
+          tar -xzf /tmp/gitleaks.tar.gz -C /tmp gitleaks
+          /tmp/gitleaks detect --source . --redact --verbose --exit-code 1

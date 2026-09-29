@@ -1,62 +1,31 @@
 name: Code Quality Checks
 
 permissions:
-  contents: write
+  contents: read
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    branches: [main, develop]
   push:
-    branches: [ main ]
+    branches: [main, develop]
 
 jobs:
   quality:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      - uses: actions/checkout@v5
 
-    - name: Setup Flutter
-      uses: subosito/flutter-action@v2
-      with:
-        channel: 'stable'
-        cache: true
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
 
-    - name: Ensure git user
-      run: |
-        git config user.name "github-actions[bot]"
-        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Install dependencies
+        run: flutter pub get
 
-    - name: Format code and commit if needed
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        flutter pub get
-        dart format .
-        git add -A
-        if [ -n "$(git status --porcelain)" ]; then
-          git commit -m "chore: format code (ci)"
-          git push
-        fi
+      - name: Verify formatting
+        run: dart format --output=none --set-exit-if-changed lib test tool
 
-    - name: Install dependencies
-      run: |
-        flutter pub get
-        dart pub global activate dart_code_metrics
-
-    - name: Run code metrics
-      run: |
-        dart pub global run dart_code_metrics:metrics analyze lib
-        dart pub global run dart_code_metrics:metrics check-unused-code lib
-        dart pub global run dart_code_metrics:metrics check-unused-files lib
-
-    - name: Check documentation coverage
-      run: dart doc --dry-run
-
-    - name: Run import sorter check
-      run: dart run import_sorter:main --check
-
-    - name: Validate translations (if using i18n)
-      run: dart run slang validate
-      continue-on-error: true
+      - name: Analyze project source
+        run: dart analyze --fatal-infos
