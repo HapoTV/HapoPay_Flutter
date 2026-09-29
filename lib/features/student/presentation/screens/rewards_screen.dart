@@ -7,6 +7,7 @@ import 'package:hapopay/core/constants/constants.dart';
 import 'package:hapopay/features/student/presentation/screens/models/tier_info.dart';
 
 import '../../../../core/theme/tokens.dart';
+
 import '../../providers/rewards_screen_provider.dart';
 
 class RewardsScreen extends ConsumerWidget {
@@ -585,11 +586,12 @@ class RewardsScreen extends ConsumerWidget {
                               )
                             else if (!award.isLocked)
                               GestureDetector(
-                                onTap: () {
+                                onTap: () async {
                                   HapticFeedback.mediumImpact();
-                                  final pts = ref
+                                  final pts = await ref
                                       .read(rewardsScreenProvider.notifier)
                                       .claimAchievement(index);
+                                  if (!context.mounted || pts <= 0) return;
                                   if (pts > 0) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(

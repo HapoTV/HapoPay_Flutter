@@ -1,9 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/tokens.dart';
+import '../data/parent_catalog.dart';
 import '../models/child_model.dart';
 import '../models/parent_model.dart';
 import '../models/spend_model.dart';
+import '../repository/parent_repository.dart';
 
 class ParentDashboardState {
   final double familyBalance;
@@ -121,7 +123,43 @@ class ParentDashboardState {
 
 class ParentDashboardNotifier extends Notifier<ParentDashboardState> {
   @override
-  ParentDashboardState build() => const ParentDashboardState();
+  ParentDashboardState build() {
+    Future.microtask(_loadFromApi);
+    return _seed();
+  }
+
+  ParentDashboardState _seed() {
+    final parsed = ParentCatalog.dashboardFromJson(ParentCatalog.dashboardJson());
+    return ParentDashboardState(
+      familyBalance: parsed.familyBalance,
+      addedThisWeek: parsed.addedThisWeek,
+      showAlert: parsed.showAlert,
+      alertMessage: parsed.alertMessage,
+      children: parsed.children,
+      spendCategories: parsed.spendCategories,
+      recentTxns: parsed.recentTxns,
+    );
+  }
+
+  Future<void> _loadFromApi() async {
+    try {
+      final data = await ref.read(parentRepositoryProvider).fetchDashboard();
+      final selected = state.selectedChildIndex;
+      final alertVisible = state.showAlert;
+      state = ParentDashboardState(
+        familyBalance: data.familyBalance,
+        addedThisWeek: data.addedThisWeek,
+        selectedChildIndex: selected,
+        showAlert: alertVisible && data.showAlert,
+        alertMessage: data.alertMessage,
+        children: data.children,
+        spendCategories: data.spendCategories,
+        recentTxns: data.recentTxns,
+      );
+    } catch (_) {
+      // Keep the seed dashboard when the API is unreachable.
+    }
+  }
 
   void selectChild(int index) {
     if (index >= 0 && index < state.children.length) {

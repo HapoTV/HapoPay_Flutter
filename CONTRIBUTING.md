@@ -26,33 +26,35 @@ Please read and follow our [Code of Conduct](CODE_OF_CONDUCT.md) before contribu
 
 ### Prerequisites
 
-- **Flutter SDK**: 3.22.0+
-- **Dart**: 3.4.0+
-- **Android Studio** / **VS Code** with Flutter/Dart plugins
-- **Xcode 15+** (macOS only, for iOS development)
-- **Django Backend** running locally or accessible via network
+- **Flutter SDK**: stable channel (Dart 3.x; `pubspec.yaml` allows `>=3.0.0 <4.0.0`)
+- **JDK 17+** for Android builds
+- **Android SDK + emulator** (Android Studio optional)
+- **Xcode 15+** — macOS only, for iOS
+- **Django backend** — only if `USE_MOCK_API=false`
+
+See **[docs/SETUP.md](docs/SETUP.md)** for the full local/emulator flow.
 
 ### Initial Setup
 
 ```bash
-# 1. Fork and clone the repository
-git clone https://github.com/<your-username>/hapopay_flutter.git
-cd hapopay_flutter
+# 1. Fork and clone (this repo is the Flutter app root)
+git clone https://github.com/<your-username>/HapoPay_Flutter.git
+cd HapoPay_Flutter
 
 # 2. Add upstream remote
-git remote add upstream https://github.com/HapoTV/hapopay_flutter.git
+git remote add upstream https://github.com/HapoTV/HapoPay_Flutter.git
 
 # 3. Install dependencies
 flutter pub get
 
-# 4. Configure environment (optional)
+# 4. Configure environment
 cp .env.example .env.dev
-# Edit .env.dev with your credentials
+# For UI demos: USE_MOCK_API=true  (no Django / Supabase required)
 
-# 5. Generate code (Riverpod)
-flutter pub run build_runner build --delete-conflicting-outputs
+# 5. Codegen only if you changed @riverpod annotations
+dart run build_runner build --delete-conflicting-outputs
 
-# 6. Verify setup
+# 6. Verify and run (the --dart-define-from-file flag is required)
 flutter doctor
 flutter run --dart-define-from-file=.env.dev
 ```
@@ -185,9 +187,11 @@ lib/
 
 | Type | Location | Command | Coverage Target |
 |------|----------|---------|-----------------|
-| Unit | `test/unit/` | `flutter test test/unit/` | ≥ 80% |
-| Widget | `test/widget/` | `flutter test test/widget/` | Key flows |
-| Integration | `integration_test/` | `flutter test integration_test/` | Critical paths |
+| Unit / widget | `test/` | `flutter test` | Existing files under `test/` |
+| Feature | `test/features/` | `flutter test test/features/` | Key flows |
+| Core | `test/core/` | `flutter test test/core/` | Network, theme |
+
+There is no `test/unit/` or `integration_test/` directory in this repo.
 
 ### Running Tests
 
@@ -197,20 +201,16 @@ flutter test
 
 # Run with coverage
 flutter test --coverage
-genhtml coverage/lcov.info -o coverage/html
 
-# Run specific test file
-flutter test test/unit/rewards_repository_test.dart
+# Run a specific file
+flutter test test/features/student/reward_model_test.dart
 ```
 
 ### Test Guidelines
 
 - Write tests for new features and bug fixes
-- Use `mocktail` for mocking dependencies
 - Test business logic in isolation (unit tests)
 - Test UI behavior and state changes (widget tests)
-- Integration tests for critical user flows (auth, payments)
-- Follow AAA pattern: Arrange, Act, Assert
 
 ---
 

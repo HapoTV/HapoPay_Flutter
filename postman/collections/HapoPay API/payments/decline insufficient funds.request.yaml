@@ -1,0 +1,22 @@
+$kind: http-request
+method: POST
+url: '{{base_url}}/payments/process/'
+order: 2000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "student_id": "{{student_id}}",
+      "qr_payload": "{\"amount\":\"99999\",\"description\":\"Too big\"}"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('oversized payment is declined', function () {
+        pm.response.to.have.status(400);
+        pm.expect(pm.response.json().detail).to.include('Insufficient funds');
+      });

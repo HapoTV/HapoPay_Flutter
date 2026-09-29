@@ -1,0 +1,397 @@
+openapi: 3.0.3
+info:
+  title: HapoPay API
+  version: 1.0.0
+  description: |
+    Django REST contract consumed by the HapoPay Flutter app.
+    Auth is JWT bearer. With `USE_MOCK_API=true`, Dio's MockInterceptor
+    serves the same shapes. `tool/mock_api_server.dart` exposes that
+    interceptor over HTTP at `http://127.0.0.1:8000/api`.
+servers:
+  - url: http://127.0.0.1:8000/api
+    description: Local mock
+  - url: http://10.0.2.2:8000/api
+    description: Android emulator loopback
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    studentId:
+      name: studentId
+      in: path
+      required: true
+      schema:
+        type: string
+      example: student_123
+  schemas:
+    Error:
+      type: object
+      properties:
+        detail:
+          type: string
+      required: [detail]
+    User:
+      type: object
+      properties:
+        id: {type: string}
+        email: {type: string, format: email}
+        full_name: {type: string}
+        role: {type: string, enum: [parent, student]}
+        avatar_url: {type: string, nullable: true}
+      required: [id, email, full_name, role]
+    AuthResponse:
+      type: object
+      properties:
+        access: {type: string}
+        refresh: {type: string}
+        user: {$ref: '#/components/schemas/User'}
+      required: [access, refresh, user]
+    Transaction:
+      type: object
+      properties:
+        id: {type: string}
+        description: {type: string}
+        amount: {type: number}
+        timestamp: {type: string, format: date-time}
+        type: {type: string, enum: [debit, credit]}
+      required: [id, description, amount, timestamp, type]
+    StudentAccount:
+      type: object
+      properties:
+        student_id: {type: string}
+        balance: {type: number}
+        daily_limit: {type: number, description: Zero locks the card.}
+        today_spent: {type: number}
+        transactions:
+          type: array
+          items: {$ref: '#/components/schemas/Transaction'}
+      required: [student_id, balance, daily_limit, today_spent, transactions]
+    Achievement:
+      type: object
+      properties:
+        id: {type: string}
+        name: {type: string}
+        description: {type: string}
+        earned: {type: boolean}
+        claimed: {type: boolean}
+        icon: {type: string}
+        points: {type: integer}
+        progress: {type: integer}
+        goal: {type: integer}
+      required: [id, name, description, earned, claimed, icon, points]
+    RewardState:
+      type: object
+      properties:
+        student_id: {type: string}
+        total_points: {type: integer}
+        tier: {type: string, enum: [bronze, silver, gold, platinum]}
+        next_milestone_points: {type: integer, nullable: true}
+        streak_days: {type: integer}
+        achievements:
+          type: array
+          items: {$ref: '#/components/schemas/Achievement'}
+        milestones:
+          type: array
+          items:
+            type: object
+            properties:
+              tier: {type: string}
+              min_points: {type: integer}
+              max_points: {type: integer, nullable: true}
+      required: [student_id, total_points, tier, achievements]
+    ParentDashboard:
+      type: object
+      properties:
+        family_balance: {type: number}
+        added_this_week: {type: number}
+        show_alert: {type: boolean}
+        alert_message: {type: string}
+        children:
+          type: array
+          items:
+            type: object
+            properties:
+              id: {type: string}
+              name: {type: string}
+              age: {type: integer}
+              avatar: {type: string}
+              balance: {type: number}
+              limit: {type: number}
+              spent: {type: number}
+              color: {type: string}
+        spend_categories:
+          type: array
+          items:
+            type: object
+            properties:
+              label: {type: string}
+              pct: {type: number}
+              color: {type: string}
+        recent_transactions:
+          type: array
+          items:
+            type: object
+            properties:
+              child_name: {type: string}
+              merchant: {type: string}
+              amount: {type: number}
+              time: {type: string}
+              cat: {type: string}
+              approved: {type: boolean}
+    Ledger:
+      type: object
+      properties:
+        transactions:
+          type: array
+          items:
+            type: object
+            properties:
+              child: {type: string}
+              merchant: {type: string}
+              amount: {type: number}
+              date: {type: string}
+              time: {type: string}
+              cat: {type: string}
+              status: {type: string, enum: [approved, flagged]}
+paths:
+  /accounts/token/:
+    post:
+      tags: [Accounts]
+      summary: Log in
+      description: Exchange email and password for JWT access and refresh tokens.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: {type: string}
+                password: {type: string}
+            example:
+              email: student@hapopay.com
+              password: secret
+      responses:
+        '200':
+          description: Authenticated
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/AuthResponse'}
+  /accounts/register/:
+    post:
+      tags: [Accounts]
+      summary: Register
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password, full_name, role]
+              properties:
+                email: {type: string}
+                password: {type: string}
+                full_name: {type: string}
+                role: {type: string, enum: [parent, student]}
+      responses:
+        '200':
+          description: Account created and authenticated
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/AuthResponse'}
+  /accounts/token/refresh/:
+    post:
+      tags: [Accounts]
+      summary: Refresh access token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refresh]
+              properties:
+                refresh: {type: string}
+      responses:
+        '200':
+          description: New tokens
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access: {type: string}
+                  refresh: {type: string}
+  /accounts/logout/:
+    post:
+      tags: [Accounts]
+      summary: Log out
+      description: Blacklists the refresh token.
+      security: [{bearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refresh]
+              properties:
+                refresh: {type: string}
+      responses:
+        '200':
+          description: Logged out
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail: {type: string}
+  /accounts/me/:
+    get:
+      tags: [Accounts]
+      summary: Current user
+      security: [{bearerAuth: []}]
+      responses:
+        '200':
+          description: Profile
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/User'}
+  /rewards/{studentId}/:
+    get:
+      tags: [Rewards]
+      summary: Reward state
+      security: [{bearerAuth: []}]
+      parameters:
+        - $ref: '#/components/parameters/studentId'
+      responses:
+        '200':
+          description: Points, tier, and achievements
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/RewardState'}
+  /rewards/{studentId}/claim/:
+    post:
+      tags: [Rewards]
+      summary: Claim an achievement
+      security: [{bearerAuth: []}]
+      parameters:
+        - $ref: '#/components/parameters/studentId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [achievement_id]
+              properties:
+                achievement_id: {type: string}
+            example:
+              achievement_id: qr_rookie
+      responses:
+        '200':
+          description: Updated reward state
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/RewardState'}
+  /student/account/{studentId}/:
+    get:
+      tags: [Student]
+      summary: Student account
+      security: [{bearerAuth: []}]
+      parameters:
+        - $ref: '#/components/parameters/studentId'
+      responses:
+        '200':
+          description: Balance, limit, and transactions
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/StudentAccount'}
+    patch:
+      tags: [Student]
+      summary: Update daily spending limit
+      description: Send `daily_limit` of 0 to lock the card.
+      security: [{bearerAuth: []}]
+      parameters:
+        - $ref: '#/components/parameters/studentId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [daily_limit]
+              properties:
+                daily_limit: {type: number}
+            example:
+              daily_limit: 75
+      responses:
+        '200':
+          description: Updated account
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/StudentAccount'}
+  /payments/process/:
+    post:
+      tags: [Payments]
+      summary: Process a QR payment
+      description: |
+        `qr_payload` is a JSON string with `amount` and `description`.
+        Declines with 400 when funds are insufficient, the card is locked
+        (`daily_limit` is 0), or the payment would exceed the daily limit.
+      security: [{bearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [student_id, qr_payload]
+              properties:
+                student_id: {type: string}
+                qr_payload: {type: string}
+            example:
+              student_id: student_123
+              qr_payload: '{"amount":"4.50","description":"School Cafeteria"}'
+      responses:
+        '200':
+          description: Updated account after debit
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/StudentAccount'}
+        '400':
+          description: Payment declined
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Error'}
+  /parent/dashboard/:
+    get:
+      tags: [Parent]
+      summary: Family dashboard
+      security: [{bearerAuth: []}]
+      responses:
+        '200':
+          description: Children, spend mix, and recent activity
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/ParentDashboard'}
+  /parent/ledger/:
+    get:
+      tags: [Parent]
+      summary: Family ledger
+      security: [{bearerAuth: []}]
+      responses:
+        '200':
+          description: Transactions across children
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Ledger'}
+security:
+  - bearerAuth: []

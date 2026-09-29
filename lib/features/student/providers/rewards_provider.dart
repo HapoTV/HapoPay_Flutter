@@ -4,40 +4,28 @@
 library;
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../../auth/presentation/providers/auth_providers.dart';
 import '../models/reward_model.dart';
 import '../models/rewards_catalog.dart';
+import '../repository/rewards_repository.dart';
 
 part 'rewards_provider.g.dart';
-
-// ---------------------------------------------------------------------------
-// Rewards AsyncNotifier
-// ---------------------------------------------------------------------------
 
 @riverpod
 class Rewards extends _$Rewards {
   @override
   Future<RewardModel> build() async {
-    // -------------------------------------------------------------------------
-    // API Call (Commented out for UI testing)
-    // -------------------------------------------------------------------------
-    // final user = ref.watch(authProvider).user;
-    // final studentId = user?.id;
-    // if (studentId == null || studentId.isEmpty) {
-    //   return RewardModel.demo(studentId: 'student_123');
-    // }
-    // return ref.read(rewardsRepositoryProvider).fetchRewards(studentId);
-
-    return RewardModel.demo(studentId: 'student_123');
+    return _fetch();
   }
 
   Future<void> refresh() async {
     state = const AsyncLoading();
-    // state = await AsyncValue.guard(() => _fetch());
-    state = AsyncData(RewardModel.demo(studentId: 'student_123'));
+    state = await AsyncValue.guard(_fetch);
   }
 
   /// Claim an earned achievement.
-  /// Optimistically bumps points/tier for UI testing.
+  /// Optimistically bumps points, then reconciles with the server response.
+  /// On failure the previous [AsyncData] is restored.
   Future<void> claimAchievement(String achievementId) async {
     final previous = state;
     final current = previous.asData?.value;
@@ -45,25 +33,36 @@ class Rewards extends _$Rewards {
 
     state = AsyncData(RewardsCatalog.applyClaim(current, achievementId));
 
-    // -------------------------------------------------------------------------
-    // API Call (Commented out for UI testing)
-    // -------------------------------------------------------------------------
-    // try {
-    //   final user = ref.read(authProvider).user;
-    //   final studentId = user?.id;
-    //   if (studentId == null || studentId.isEmpty) {
-    //     throw StateError('Sign in to claim rewards');
-    //   }
-    //   final updated = await ref
-    //       .read(rewardsRepositoryProvider)
-    //       .claimAchievement(studentId, achievementId);
-    //   if (!ref.mounted) return;
-    //   state = AsyncData(updated);
-    // } catch (e) {
-    //   if (!ref.mounted) rethrow;
-    //   state = previous;
-    //   rethrow;
-    // }
+    try {
+      final studentId = _studentId();
+      if (studentId == null) {
+        throw StateError('Sign in to claim rewards');
+      }
+      final updated = await ref
+          .read(rewardsRepositoryProvider)
+          .claimAchievement(studentId, achievementId);
+      if (!ref.mounted) return;
+      state = AsyncData(updated);
+    } catch (e) {
+      if (!ref.mounted) rethrow;
+      state = previous;
+      rethrow;
+    }
+  }
+
+  Future<RewardModel> _fetch() async {
+    final studentId = _studentId();
+    if (studentId == null) {
+      return RewardModel.demo(studentId: 'student_123');
+    }
+    return ref.read(rewardsRepositoryProvider).fetchRewards(studentId);
+  }
+
+  String? _studentId() {
+    ref.watch(authProvider);
+    final id = ref.read(authProvider).user?.id;
+    if (id == null || id.isEmpty) return null;
+    return id;
   }
 }
 

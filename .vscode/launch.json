@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "HapoPay (Android emulator)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "toolArgs": [
+                "--dart-define-from-file=.env.dev"
+            ],
+            "preLaunchTask": "Start hapopay emulator"
+        }
+    ]
+}

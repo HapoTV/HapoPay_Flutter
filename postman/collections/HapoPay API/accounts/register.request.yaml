@@ -1,0 +1,31 @@
+$kind: http-request
+method: POST
+url: '{{base_url}}/accounts/register/'
+order: 2000
+auth:
+  type: noauth
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "email": "parent@hapopay.com",
+      "password": "secret",
+      "full_name": "Demo Parent",
+      "role": "parent"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('register returns 200', function () {
+        pm.response.to.have.status(200);
+      });
+      const json = pm.response.json();
+      pm.test('register returns a parent user', function () {
+        pm.expect(json.user.role).to.eql('parent');
+        pm.expect(json.user.full_name).to.eql('Demo Parent');
+        pm.expect(json.access).to.be.a('string').and.not.empty;
+      });

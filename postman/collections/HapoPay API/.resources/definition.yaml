@@ -1,0 +1,20 @@
+$kind: collection
+name: HapoPay API
+description: |-
+  HapoPay Django REST contract used by the Flutter app.
+  Point base_url at the local mock (`dart run tool/mock_api_server.dart`)
+  or a running Django server.
+variables:
+  - key: base_url
+    value: 'http://127.0.0.1:8000/api'
+  - key: access_token
+    value: ''
+  - key: refresh_token
+    value: ''
+  - key: student_id
+    value: student_123
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{access_token}}'

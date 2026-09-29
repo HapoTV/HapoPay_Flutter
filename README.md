@@ -1,11 +1,11 @@
 # HapoPay — Flutter Mobile Application
 ### Technical Documentation · v1.0.0 · August 2026
 
-> Cross-platform mobile app built with Flutter, powered by a Django REST API & Supabase
+> Cross-platform Flutter app. Production API is Django REST; Supabase is optional. Local UI demos use `USE_MOCK_API=true` and need neither backend.
 
-| Platform | Flutter SDK | Dart | API Backend | Database / Realtime | Status |
-|----------|-------------|------|-------------|---------------------|--------|
-| iOS & Android | 3.22+ | 3.4+ | Django REST | Supabase | Production prep |
+| Platform | Flutter SDK | Dart | API Backend | Realtime | Status |
+|----------|-------------|------|-------------|----------|--------|
+| Android (Linux/macOS/Windows) · iOS (macOS) | stable (CI) | 3.x (`>=3.0.0 <4.0.0`) | Django REST, or in-app mock | Optional Supabase | Production prep |
 
 ---
 
@@ -28,9 +28,11 @@
 
 HapoPay is a parent-student money management and smart spending platform. The Flutter app gives parents tools to manage allowances, adjust spending limits, and monitor transactions in real time. Students get a safe payment flow with dynamic QR codes, biometric auth, and a gamified rewards hub (tiers, streaks, claimable achievements).
 
-**Backend model:** Django handles business logic and the transaction gateway; Supabase provides realtime updates, database hosting, and storage.
+**Backend model:** Django owns business logic and the payment gateway. Supabase is optional (`Supabase.initialize` is skipped when `SUPABASE_URL` is empty). With `USE_MOCK_API=true`, Dio serves an in-memory catalog so you can demo without any server.
 
-**App stack:** Riverpod (state), GoRouter (navigation), Dio (HTTP + interceptors), Material 3 light/dark theming via `lib/core/theme/`.
+**App stack:** Riverpod 3 (state + codegen), GoRouter (navigation), Dio (HTTP + auth/retry/mock interceptors), Material 3 light/dark theming via `lib/core/theme/`.
+
+**Clone:** `git clone git@github.com:HapoTV/HapoPay_Flutter.git` — this *is* the Flutter app root (there is no `mobile/` subfolder). Setup: **[docs/SETUP.md](docs/SETUP.md)**.
 
 ---
 
@@ -38,7 +40,7 @@ HapoPay is a parent-student money management and smart spending platform. The Fl
 
 | Doc | Description |
 |-----|-------------|
-| **[Setup & Installation](docs/SETUP.md)** | Local environment, Flutter deps, `build_runner`, run commands |
+| **[Setup & Installation](docs/SETUP.md)** | Clone this repo, Flutter, mock vs live API, Android emulator, demo logins |
 | **[Environment Variables](docs/SETUP_ENV.md)** | `.env.dev` / `.env.prod`, `USE_MOCK_API`, emulator loopback, keystore |
 | **[Architecture](docs/ARCHITECTURE.md)** | Clean layers, Riverpod, GoRouter |
 | **[Features & Screens](docs/FEATURES.md)** | Auth, parent dashboard, student QR & rewards routes |
@@ -97,28 +99,29 @@ cp .env.example .env.prod
 ```
 
 ```bash
-# .env.example
-SUPABASE_URL=https://your-supabase-instance.supabase.co
-SUPABASE_ANON_KEY=your-supabase-public-anon-key
-API_BASE_URL=http://localhost:8000/api
+# .env.example (compile-time KEY=VALUE; no quotes)
+SUPABASE_URL=
+SUPABASE_ANON_KEY=
+API_BASE_URL=http://10.0.2.2:8000/api
 USE_MOCK_API=false
 ```
 
 | Variable | Notes |
 |----------|--------|
-| `API_BASE_URL` | Use `http://10.0.2.2:8000/api` on the Android emulator |
-| `USE_MOCK_API` | `true` only for local UI demos without Django; **must be `false` for release** |
+| `SUPABASE_URL` | Optional. Empty skips Supabase init |
+| `API_BASE_URL` | `http://10.0.2.2:8000/api` on the Android emulator when talking to host Django |
+| `USE_MOCK_API` | `true` for local UI demos without Django; **must be `false` for release** |
 
-Full reference: **[docs/SETUP_ENV.md](docs/SETUP_ENV.md)**.
+Every `flutter run` / `flutter build` must pass `--dart-define-from-file`. Full reference: **[docs/SETUP_ENV.md](docs/SETUP_ENV.md)**.
 
 ### 5.2 Run / build with env injection
 
 ```bash
-# Development
+# UI demo (set USE_MOCK_API=true in .env.dev)
 flutter run --dart-define-from-file=.env.dev
 
-# Codegen (Riverpod)
-flutter pub run build_runner build --delete-conflicting-outputs
+# Codegen — only after changing @riverpod annotations (*.g.dart is already committed)
+dart run build_runner build --delete-conflicting-outputs
 ```
 
 ---
@@ -127,7 +130,9 @@ flutter pub run build_runner build --delete-conflicting-outputs
 
 ### 6.1 Android signing
 
-Create `android/key.properties` locally (gitignored):
+**Current tree:** `applicationId` is `com.example.hapopay`. Release builds sign with the **debug** keystore (`android/app/build.gradle.kts`). `android/key.properties` is gitignored and not loaded yet.
+
+When release signing is wired, create `android/key.properties` locally:
 
 ```properties
 storePassword=your-android-keystore-password
@@ -141,7 +146,7 @@ flutter build appbundle --release --dart-define-from-file=.env.prod
 flutter build apk --release --dart-define-from-file=.env.prod
 ```
 
-Application ID: `com.hapopay.hapoPay`
+Intended store application id (not applied in Gradle yet): `com.hapopay.hapoPay`
 
 ### 6.2 iOS deployment
 
@@ -164,8 +169,8 @@ Store-readiness checklist and phased runbook: **[PRODUCTION_READINESS.md](PRODUC
 | `Connection refused` on Android emulator | `localhost` is the emulator, not the host | Set `API_BASE_URL` to `http://10.0.2.2:8000/api` |
 | Realtime subscription fails | Replication not enabled | Enable tables under Supabase **Database → Replication** |
 | Invalid JWT | Django / Supabase signing mismatch | Align SimpleJWT secret with Supabase JWT secret if sharing tokens |
-| Keystore / signing failure | Missing `key.properties` | Add `android/key.properties` pointing at a valid `.jks` |
-| Camera viewport blank | Missing permissions | Confirm `CAMERA` / `NSCameraUsageDescription` |
+| Keystore / signing failure | Release signing not wired; debug keys used | `flutter run` does not need `key.properties`. Store builds still need Gradle + keystore work |
+| Camera viewport blank | Main AndroidManifest has no `CAMERA` yet | iOS already has `NSCameraUsageDescription`; Android still needs the permission |
 | Unexpected mock responses in release | `USE_MOCK_API=true` | Set `USE_MOCK_API=false` in `.env.prod` |
 
 ---
@@ -180,7 +185,7 @@ Store-readiness checklist and phased runbook: **[PRODUCTION_READINESS.md](PRODUC
 - Rewards catalog shared across mock, demo, and UI — see [docs/rewards_system.md](docs/rewards_system.md)
 - Networking: Dio interceptors (auth, retry, errors); mock API gated by `USE_MOCK_API`
 - Theme: Material 3 light/dark tokens in `lib/core/theme/`
-- Android: `com.hapopay.hapoPay` + release signing via `key.properties`
+- Android: package still `com.example.hapopay`; iOS bundle `com.hapopay.hapoPay`; release signing still debug keys
 - CI: analyze, tests, debug builds
 
 ### Upcoming

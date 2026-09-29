@@ -1,0 +1,39 @@
+$kind: http-request
+method: POST
+url: '{{base_url}}/accounts/token/'
+order: 1000
+auth:
+  type: noauth
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "email": "student@hapopay.com",
+      "password": "secret"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('login returns 200', function () {
+        pm.response.to.have.status(200);
+      });
+      const json = pm.response.json();
+      pm.test('login returns tokens and user', function () {
+        pm.expect(json.access).to.be.a('string').and.not.empty;
+        pm.expect(json.refresh).to.be.a('string').and.not.empty;
+        pm.expect(json.user.role).to.eql('student');
+        pm.expect(json.user.email).to.eql('student@hapopay.com');
+      });
+      pm.collectionVariables.set('access_token', json.access);
+      pm.collectionVariables.set('refresh_token', json.refresh);
+      pm.collectionVariables.set('student_id', json.user.id);
+      if (pm.environment && pm.environment.name) {
+        pm.environment.set('access_token', json.access);
+        pm.environment.set('refresh_token', json.refresh);
+        pm.environment.set('student_id', json.user.id);
+      }
+examples: './.resources/login.request.resources/examples'

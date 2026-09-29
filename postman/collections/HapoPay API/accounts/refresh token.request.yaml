@@ -1,0 +1,26 @@
+$kind: http-request
+method: POST
+url: '{{base_url}}/accounts/token/refresh/'
+order: 4000
+auth:
+  type: noauth
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "refresh": "{{refresh_token}}"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('refresh returns 200', function () {
+        pm.response.to.have.status(200);
+      });
+      const json = pm.response.json();
+      pm.test('refresh returns a new access token', function () {
+        pm.expect(json.access).to.be.a('string').and.not.empty;
+      });

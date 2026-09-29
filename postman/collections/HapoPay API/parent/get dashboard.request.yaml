@@ -1,0 +1,18 @@
+$kind: http-request
+method: GET
+url: '{{base_url}}/parent/dashboard/'
+order: 1000
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('dashboard returns 200', function () {
+        pm.response.to.have.status(200);
+      });
+      const json = pm.response.json();
+      pm.test('dashboard lists children and categories', function () {
+        pm.expect(json.family_balance).to.be.a('number');
+        pm.expect(json.children).to.be.an('array').that.is.not.empty;
+        pm.expect(json.spend_categories).to.be.an('array').that.is.not.empty;
+        pm.expect(json.recent_transactions).to.be.an('array');
+      });

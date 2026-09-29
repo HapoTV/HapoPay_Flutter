@@ -1,0 +1,17 @@
+$kind: http-request
+method: GET
+url: '{{base_url}}/student/account/{{student_id}}/'
+order: 1000
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('account returns 200', function () {
+        pm.response.to.have.status(200);
+      });
+      const json = pm.response.json();
+      pm.test('account has balance limit and transactions', function () {
+        pm.expect(json.balance).to.be.a('number');
+        pm.expect(json.daily_limit).to.be.a('number');
+        pm.expect(json.transactions).to.be.an('array');
+      });

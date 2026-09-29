@@ -49,3 +49,5 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 issues.md
+# Widget Preview related
+.widget_preview/

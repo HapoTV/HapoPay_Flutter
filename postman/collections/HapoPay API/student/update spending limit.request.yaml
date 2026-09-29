@@ -1,0 +1,23 @@
+$kind: http-request
+method: PATCH
+url: '{{base_url}}/student/account/{{student_id}}/'
+order: 2000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "daily_limit": 75
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('limit update returns 200', function () {
+        pm.response.to.have.status(200);
+      });
+      pm.test('daily limit is updated', function () {
+        pm.expect(pm.response.json().daily_limit).to.eql(75);
+      });

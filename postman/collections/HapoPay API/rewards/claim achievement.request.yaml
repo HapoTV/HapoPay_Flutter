@@ -1,0 +1,26 @@
+$kind: http-request
+method: POST
+url: '{{base_url}}/rewards/{{student_id}}/claim/'
+order: 2000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "achievement_id": "qr_rookie"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('claim returns 200', function () {
+        pm.response.to.have.status(200);
+      });
+      const json = pm.response.json();
+      const claimed = json.achievements.find((item) => item.id === 'qr_rookie');
+      pm.test('qr_rookie is claimed and points increased', function () {
+        pm.expect(claimed.claimed).to.eql(true);
+        pm.expect(json.total_points).to.be.at.least(270);
+      });

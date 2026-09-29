@@ -1,0 +1,23 @@
+$kind: http-request
+method: POST
+url: '{{base_url}}/accounts/logout/'
+order: 5000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "refresh": "{{refresh_token}}"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('logout returns 200', function () {
+        pm.response.to.have.status(200);
+      });
+      pm.test('logout confirms', function () {
+        pm.expect(pm.response.json().detail).to.be.a('string');
+      });

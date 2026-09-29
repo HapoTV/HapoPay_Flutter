@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ChildProfile {
+  final String id;
   final String name;
   final int age;
   final String avatar;
@@ -10,6 +11,7 @@ class ChildProfile {
   final Color color;
 
   const ChildProfile({
+    this.id = '',
     required this.name,
     required this.age,
     required this.avatar,

@@ -1,0 +1,16 @@
+$kind: http-request
+method: GET
+url: '{{base_url}}/parent/ledger/'
+order: 2000
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('ledger returns 200', function () {
+        pm.response.to.have.status(200);
+      });
+      const json = pm.response.json();
+      pm.test('ledger lists transactions with status', function () {
+        pm.expect(json.transactions).to.be.an('array').that.is.not.empty;
+        pm.expect(json.transactions[0]).to.include.keys('child', 'merchant', 'amount', 'status');
+      });

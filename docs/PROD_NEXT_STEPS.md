@@ -8,8 +8,8 @@ See also [`PRODUCTION_READINESS.md`](../PRODUCTION_READINESS.md) for the full ch
 ## Phase 1 — Identity & signing
 
 ### Android (wired in app)
-- [x] `applicationId` / `namespace` → `com.hapopay.hapoPay`
-- [x] Release signing loads `android/key.properties` + upload keystore
+- [ ] `applicationId` / `namespace` → `com.hapopay.hapoPay` (currently `com.example.hapopay`)
+- [ ] Release signing loads `android/key.properties` + upload keystore (currently debug keys)
 - [ ] Confirm `android/key.properties` and `android/keys/upload-keystore.jks` exist locally (gitignored)
 - [ ] Verify release AAB:
 

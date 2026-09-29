@@ -37,7 +37,7 @@ This document outlines the roadmap for the HapoPay mobile application, focusing 
 - **Security Audit:** Validate token expiration flows, deep-linking security, and secure environment variable handling (`.env.dev` vs `.env.prod` — see [`SETUP_ENV.md`](SETUP_ENV.md)). Mock API is gated by `USE_MOCK_API` (must be `false` in prod).
 - **Launch Prep:** Configure App Store/Play Store metadata, set up deployment flavors, and run final performance profiling on physical devices.
 - **CI/CD Pipeline:** Set up a CI/CD pipeline (build, `flutter analyze`, test suite) that must pass before a release build is cut — all automated tests green as a hard gate for deployment.
-- **Android identity:** `com.hapopay.hapoPay` + release signing via `key.properties` (see runbook Phase 1).
+- **Android identity:** still `com.example.hapopay`; store id `com.hapopay.hapoPay` + `key.properties` signing are not wired yet (see runbook Phase 1).
 
 ---
 

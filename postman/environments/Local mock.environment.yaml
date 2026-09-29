@@ -1,0 +1,19 @@
+name: Local mock
+values:
+  - key: base_url
+    value: 'http://127.0.0.1:8000/api'
+    enabled: true
+    type: default
+    description: Mock server or Django base URL including /api
+  - key: access_token
+    value: ''
+    enabled: true
+    type: secret
+  - key: refresh_token
+    value: ''
+    enabled: true
+    type: secret
+  - key: student_id
+    value: student_123
+    enabled: true
+    type: default

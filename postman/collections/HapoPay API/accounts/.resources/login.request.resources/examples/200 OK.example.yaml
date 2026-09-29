@@ -1,0 +1,25 @@
+$kind: http-example
+name: 200 OK
+request:
+  url: '{{base_url}}/accounts/token/'
+  method: POST
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    - key: Content-Type
+      value: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "access": "mock_access_token_student",
+        "refresh": "mock_refresh_token",
+        "user": {
+          "id": "student_123",
+          "email": "student@hapopay.com",
+          "full_name": "Demo Student",
+          "role": "student",
+          "avatar_url": null
+        }
+      }

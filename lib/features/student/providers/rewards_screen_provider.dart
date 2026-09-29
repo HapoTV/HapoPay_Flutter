@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../models/reward_model.dart';
 import '../presentation/screens/models/achievement_item.dart';
+import 'rewards_provider.dart';
 
 class RewardsScreenState {
   final int totalPoints;
@@ -9,93 +11,79 @@ class RewardsScreenState {
   final List<bool> completedDays;
 
   const RewardsScreenState({
-    this.totalPoints = 680,
+    this.totalPoints = 0,
     this.streakDays = const ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
-    this.completedDays = const [true, true, true, true, true, true, true],
-    this.achievements = const [
-      AchievementItem(
-        id: '1',
-        title: 'First Purchase',
-        desc: 'Made your first payment',
-        emoji: '🎯',
-        pts: 10,
-        isClaimed: true,
-      ),
-      AchievementItem(
-        id: '2',
-        title: 'Saver Star',
-        desc: 'Reached a savings goal',
-        emoji: '🎨',
-        pts: 25,
-        isClaimed: true,
-      ),
-      AchievementItem(
-        id: '3',
-        title: 'Budget Boss',
-        desc: 'Stayed under limit 7 days',
-        emoji: '💰',
-        pts: 50,
-        isClaimed: false,
-      ),
-      AchievementItem(
-        id: '4',
-        title: 'Streak Master',
-        desc: '7-day spending streak',
-        emoji: '🔥',
-        pts: 75,
-        isClaimed: false,
-      ),
-      AchievementItem(
-        id: '5',
-        title: 'Zero Waste',
-        desc: 'No flagged purchases in a month',
-        emoji: '✅',
-        pts: 100,
-        isClaimed: false,
-      ),
-      AchievementItem(
-        id: '6',
-        title: 'Top Saver',
-        desc: 'Saved over \$100 total',
-        emoji: '🏆',
-        pts: 150,
-        isLocked: true,
-      ),
+    this.completedDays = const [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
     ],
+    this.achievements = const [],
   });
 
-  RewardsScreenState copyWith({
-    int? totalPoints,
-    List<AchievementItem>? achievements,
-    List<String>? streakDays,
-    List<bool>? completedDays,
-  }) {
+  factory RewardsScreenState.fromReward(RewardModel reward) {
+    final streak = reward.streakDays.clamp(0, 7);
     return RewardsScreenState(
-      totalPoints: totalPoints ?? this.totalPoints,
-      achievements: achievements ?? this.achievements,
-      streakDays: streakDays ?? this.streakDays,
-      completedDays: completedDays ?? this.completedDays,
+      totalPoints: reward.totalPoints,
+      streakDays: const ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+      completedDays: List<bool>.generate(7, (index) => index < streak),
+      achievements: [
+        for (final achievement in reward.achievements)
+          AchievementItem(
+            id: achievement.id,
+            title: achievement.name,
+            desc: achievement.description,
+            emoji: _emojiFor(achievement.icon),
+            pts: achievement.points,
+            isClaimed: achievement.claimed,
+            isLocked: !achievement.earned,
+          ),
+      ],
     );
+  }
+
+  static String _emojiFor(String icon) {
+    return switch (icon) {
+      'payment' => '🎯',
+      'qr_code_scanner' => '📱',
+      'school' => '🏫',
+      'savings' => '💰',
+      'local_fire_department' => '🔥',
+      'emoji_events' => '🏆',
+      'shopping_cart' => '🛒',
+      'account_balance_wallet' => '💳',
+      _ => '⭐',
+    };
   }
 }
 
 class RewardsScreenNotifier extends Notifier<RewardsScreenState> {
   @override
-  RewardsScreenState build() => const RewardsScreenState();
+  RewardsScreenState build() {
+    final reward = ref.watch(rewardsProvider).asData?.value;
+    if (reward == null) {
+      return RewardsScreenState.fromReward(RewardModel.demo(studentId: 'student_123'));
+    }
+    return RewardsScreenState.fromReward(reward);
+  }
 
-  int claimAchievement(int index) {
+  /// Claims the achievement at [index] through `POST /rewards/{id}/claim/`.
+  /// Returns the points awarded, or `0` when the claim is rejected.
+  Future<int> claimAchievement(int index) async {
     if (index < 0 || index >= state.achievements.length) return 0;
     final item = state.achievements[index];
     if (item.isClaimed || item.isLocked) return 0;
 
-    final updatedList = List<AchievementItem>.from(state.achievements);
-    updatedList[index] = item.copyWith(isClaimed: true);
-
-    state = state.copyWith(
-      achievements: updatedList,
-      totalPoints: state.totalPoints + item.pts,
-    );
-    return item.pts;
+    try {
+      await ref.read(rewardsProvider.notifier).claimAchievement(item.id);
+      return item.pts;
+    } catch (_) {
+      return 0;
+    }
   }
 }
 

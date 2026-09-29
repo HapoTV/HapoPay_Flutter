@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:hapopay/features/parent/data/parent_fixtures.dart';
 import 'package:hapopay/features/student/models/rewards_catalog.dart';
 
 /// A Mock Interceptor that catches all API requests and returns locally
@@ -135,6 +136,7 @@ class MockInterceptor extends Interceptor {
     if (path.contains('/accounts/logout/')) {
       _currentUser = null;
       _rewardsData = null;
+      _accountData = null;
       handler.resolve(
         Response(
           requestOptions: options,
@@ -216,9 +218,9 @@ class MockInterceptor extends Interceptor {
       _initAccount(studentId);
 
       if (options.method == 'PATCH') {
-        final limit = (options.data as Map?)?['daily_limit'] as double?;
-        if (limit != null) {
-          _accountData!['daily_limit'] = limit;
+        final rawLimit = (options.data as Map?)?['daily_limit'];
+        if (rawLimit is num) {
+          _accountData!['daily_limit'] = rawLimit.toDouble();
         }
       }
 
@@ -228,7 +230,31 @@ class MockInterceptor extends Interceptor {
       return;
     }
 
-    // 9. Process QR payments: /payments/process/
+    // 9. Parent dashboard
+    if (path.contains('/parent/dashboard/')) {
+      handler.resolve(
+        Response(
+          requestOptions: options,
+          statusCode: 200,
+          data: jsonDecode(jsonEncode(ParentFixtures.dashboardJson())),
+        ),
+      );
+      return;
+    }
+
+    // 10. Parent family ledger
+    if (path.contains('/parent/ledger/')) {
+      handler.resolve(
+        Response(
+          requestOptions: options,
+          statusCode: 200,
+          data: jsonDecode(jsonEncode(ParentFixtures.ledgerJson())),
+        ),
+      );
+      return;
+    }
+
+    // 11. Process QR payments: /payments/process/
     if (path.contains('/payments/process/')) {
       final studentId =
           (options.data as Map?)?['student_id'] as String? ?? 'student_123';

@@ -1,0 +1,17 @@
+$kind: http-request
+method: GET
+url: '{{base_url}}/accounts/me/'
+order: 3000
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('profile returns 200', function () {
+        pm.response.to.have.status(200);
+      });
+      const json = pm.response.json();
+      pm.test('profile has id email and role', function () {
+        pm.expect(json.id).to.be.a('string').and.not.empty;
+        pm.expect(json.email).to.be.a('string');
+        pm.expect(json.role).to.be.oneOf(['student', 'parent']);
+      });

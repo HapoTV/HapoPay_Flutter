@@ -17,8 +17,8 @@ This document tracks remaining work to ship HapoPay v1.0.0 to App Store and Goog
 - [x] Theme system (Light/Dark, Material 3)
 - [x] CI/CD: Analysis, tests, debug builds
 - [x] Environment config via `--dart-define-from-file`
-- [x] Android `applicationId` / `namespace` → `com.hapopay.hapoPay`
-- [x] Android release signing wired via `android/key.properties`
+- [ ] Android `applicationId` / `namespace` → `com.hapopay.hapoPay` (still `com.example.hapopay`)
+- [ ] Android release signing wired via `android/key.properties` (release still uses debug keys)
 - [x] Mock API gated behind `USE_MOCK_API` (default off for release)
 
 ---
@@ -26,9 +26,9 @@ This document tracks remaining work to ship HapoPay v1.0.0 to App Store and Goog
 ## 🔴 Critical (Blockers for Store Submission)
 
 ### 1. Android Production Signing
-- [x] Generate upload keystore (`upload-keystore.jks`) — local / gitignored
-- [x] Create `android/key.properties` (gitignored)
-- [x] Update `android/app/build.gradle.kts` to use release signing config
+- [ ] Generate upload keystore (`upload-keystore.jks`) — local / gitignored
+- [ ] Create `android/key.properties` (gitignored)
+- [ ] Update `android/app/build.gradle.kts` to use release signing config
 - [ ] Test `flutter build appbundle --release --dart-define-from-file=.env.prod`
 
 ### 2. iOS Production Signing
@@ -39,7 +39,7 @@ This document tracks remaining work to ship HapoPay v1.0.0 to App Store and Goog
 - [ ] Test `flutter build ipa --release --dart-define-from-file=.env.prod`
 
 ### 3. App Identity
-- [x] Change Android `applicationId` → `com.hapopay.hapoPay`
+- [ ] Change Android `applicationId` → `com.hapopay.hapoPay`
 - [x] iOS `PRODUCT_BUNDLE_IDENTIFIER` → `com.hapopay.hapoPay`
 - [ ] Reserve bundle ID in Apple Developer / Google Play Console
 

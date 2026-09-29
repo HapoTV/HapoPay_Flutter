@@ -1,0 +1,27 @@
+$kind: http-request
+method: POST
+url: '{{base_url}}/payments/process/'
+order: 1000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "student_id": "{{student_id}}",
+      "qr_payload": "{\"amount\":\"4.50\",\"description\":\"School Cafeteria\"}"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('payment returns 200', function () {
+        pm.response.to.have.status(200);
+      });
+      const json = pm.response.json();
+      pm.test('payment debits the ledger', function () {
+        pm.expect(json.balance).to.be.below(120.5);
+        pm.expect(json.transactions[0].description).to.eql('School Cafeteria');
+        pm.expect(json.transactions[0].type).to.eql('debit');
+      });

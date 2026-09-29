@@ -1,0 +1,17 @@
+$kind: http-request
+method: GET
+url: '{{base_url}}/rewards/{{student_id}}/'
+order: 1000
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('rewards returns 200', function () {
+        pm.response.to.have.status(200);
+      });
+      const json = pm.response.json();
+      pm.test('rewards includes points tier and achievements', function () {
+        pm.expect(json.total_points).to.be.a('number');
+        pm.expect(json.tier).to.be.oneOf(['bronze', 'silver', 'gold', 'platinum']);
+        pm.expect(json.achievements).to.be.an('array').that.is.not.empty;
+      });

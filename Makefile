@@ -44,16 +44,16 @@ web: ## Runs the web application in dev
 # 	@echo "╠ Running the app"
 # 	@flutter run -d all -t lib/main.dart --dart-define=ENVIRONMENT=dev
 
-# Android 
-android: format ## Runs the mobile application in dev
-	@echo "╠ Running the app"
-	@flutter run -t lib/main.dart --dart-define=ENVIRONMENT=dev
-# @flutter run -t lib/main.dart --enable-software-rendering --dart-define=ENVIRONMENT=dev
+# Android
+android: ## Boot hapopay emulator if needed, then run the app
+	@echo "╠ Starting Android emulator (if needed) and running the app"
+	@./tool/ensure_android_emulator.sh
+	@flutter run -d emulator -t lib/main.dart --dart-define-from-file=.env.dev
 
 # iOS
-ios: format ## Runs the mobile application in dev
+ios: format ## Runs the mobile application in dev (requires .env.dev)
 	@echo "╠ Running the app"
-	@flutter run -t lib/main.dart --dart-define=ENVIRONMENT=dev
+	@flutter run -t lib/main.dart --dart-define-from-file=.env.dev
 
 lint: ## Lints the code
 	@echo "╠ Verifying code..."

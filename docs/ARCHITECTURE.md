@@ -79,7 +79,7 @@ flowchart LR
 
 ## State Management — Riverpod
 
-The app uses Riverpod 2.x for state management. Providers and Notifiers are annotated to generate highly-optimized code using `riverpod_generator`.
+The app uses Riverpod 3.x (`flutter_riverpod` in `pubspec.yaml`) for state management. Providers and Notifiers are annotated to generate highly-optimized code using `riverpod_generator`.
 
 ### Example: Transaction List Notifier
 
