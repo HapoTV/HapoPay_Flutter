@@ -47,7 +47,7 @@ class RewardsBannerCard extends ConsumerWidget {
                   Text('Loading rewards...'),
                 ],
               ),
-              error: (_, __) => _buildRow(
+              error: (_, _) => _buildRow(
                 context,
                 tierBadge: '⭐ Keeper',
                 tierColor: AppTokens.primary,

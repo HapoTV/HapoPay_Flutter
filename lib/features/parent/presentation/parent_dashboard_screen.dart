@@ -693,7 +693,7 @@ class ParentDashboardScreen extends ConsumerWidget {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: recentTxns.length,
-              separatorBuilder: (_, __) => const Spacing.vertical(8),
+              separatorBuilder: (_, _) => const Spacing.vertical(8),
               itemBuilder: (context, index) {
                 final t = recentTxns[index];
                 return Container(

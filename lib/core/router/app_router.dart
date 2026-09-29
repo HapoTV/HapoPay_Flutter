@@ -20,7 +20,7 @@ import '../../shared/widgets/main_app_scaffold.dart';
 
 class _RouterRefreshNotifier extends ChangeNotifier {
   _RouterRefreshNotifier(Ref ref) {
-    ref.listen<AuthState>(authProvider, (_, __) => notifyListeners());
+    ref.listen<AuthState>(authProvider, (_, _) => notifyListeners());
   }
 }
 

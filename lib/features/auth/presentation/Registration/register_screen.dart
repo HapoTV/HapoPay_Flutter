@@ -665,22 +665,22 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                   iconSize: 18,
                                   color: mutedForeground,
                                   tooltip: "Copy to clipboard",
-                                  onPressed: () {
-                                    Clipboard.setData(
+                                  onPressed: () async {
+                                    await Clipboard.setData(
                                       ClipboardData(text: inviteCode),
-                                    ).then((_) {
-                                      // 4. Success feedback to user
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        const SnackBar(
-                                          content: Text(
-                                            'Text copied to clipboard!',
-                                          ),
-                                          duration: Duration(seconds: 2),
+                                    );
+                                    if (!context.mounted) return;
+                                    // 4. Success feedback to user
+                                    ScaffoldMessenger.of(
+                                      context,
+                                    ).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          'Text copied to clipboard!',
                                         ),
-                                      );
-                                    });
+                                        duration: Duration(seconds: 2),
+                                      ),
+                                    );
                                   },
                                 ),
                               ],

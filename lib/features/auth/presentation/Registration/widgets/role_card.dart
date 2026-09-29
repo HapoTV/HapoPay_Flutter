@@ -15,6 +15,7 @@ class RoleCard extends StatelessWidget {
   final bool isDark;
 
   const RoleCard({
+    super.key,
     required this.role,
     required this.label,
     required this.subtitle,

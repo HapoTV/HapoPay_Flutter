@@ -11,10 +11,8 @@ import 'package:hapopay/features/student/presentation/widgets/quick_pay_button.d
 import 'package:hapopay/features/student/presentation/widgets/rewards_card.dart';
 
 import '../../../core/theme/tokens.dart';
-import '../../../shared/providers/app_shell_provider.dart';
 import '../../../shared/widgets/hapo_pay_logo.dart';
 import '../../../shared/widgets/theme_toggle.dart';
-import '../../auth/domain/entities/app_user.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../providers/student_account_provider.dart';
 
@@ -212,7 +210,7 @@ class StudentDashboardScreen extends ConsumerWidget {
                                 ),
                               ),
                             ),
-                            error: (_, __) => Text(
+                            error: (_, _) => Text(
                               '\$124.50',
                               style: GoogleFonts.dmMono(
                                 fontSize: 34,
@@ -553,7 +551,7 @@ class StudentDashboardScreen extends ConsumerWidget {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: _recentTxns.length,
-              separatorBuilder: (_, __) => const Spacing.vertical(8),
+              separatorBuilder: (_, _) => const Spacing.vertical(8),
               itemBuilder: (context, index) {
                 final t = _recentTxns[index];
                 return Container(

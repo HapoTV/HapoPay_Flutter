@@ -4,12 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hapopay/core/constants/constants.dart';
-import 'package:hapopay/features/student/presentation/screens/models/achievement_item.dart';
 import 'package:hapopay/features/student/presentation/screens/models/tier_info.dart';
 
 import '../../../../core/theme/tokens.dart';
-import '../../providers/rewards_provider.dart';
-
 import '../../providers/rewards_screen_provider.dart';
 
 class RewardsScreen extends ConsumerWidget {
@@ -477,7 +474,7 @@ class RewardsScreen extends ConsumerWidget {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: achievements.length,
-              separatorBuilder: (_, __) => const Spacing.vertical(10),
+              separatorBuilder: (_, _) => const Spacing.vertical(10),
               itemBuilder: (context, index) {
                 final award = achievements[index];
 

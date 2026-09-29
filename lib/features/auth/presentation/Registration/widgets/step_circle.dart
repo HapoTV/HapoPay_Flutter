@@ -8,6 +8,7 @@ class StepCircle extends StatelessWidget {
   final bool isDark;
 
   const StepCircle({
+    super.key,
     required this.stepNumber,
     required this.currentStep,
     required this.isDark,

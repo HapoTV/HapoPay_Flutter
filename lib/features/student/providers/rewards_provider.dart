@@ -4,10 +4,8 @@
 library;
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../../auth/providers/auth_provider.dart';
 import '../models/reward_model.dart';
 import '../models/rewards_catalog.dart';
-import '../repository/rewards_repository.dart';
 
 part 'rewards_provider.g.dart';
 
@@ -66,10 +64,6 @@ class Rewards extends _$Rewards {
     //   state = previous;
     //   rethrow;
     // }
-  }
-
-  Future<RewardModel> _fetch() async {
-    return RewardModel.demo(studentId: 'student_123');
   }
 }
 

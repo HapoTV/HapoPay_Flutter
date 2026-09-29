@@ -1,7 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../../auth/providers/auth_provider.dart';
 import '../models/student_account_model.dart';
-import '../repository/student_account_repository.dart';
 
 part 'student_account_provider.g.dart';
 
@@ -100,19 +98,6 @@ class StudentAccount extends _$StudentAccount {
         todaySpent: current.todaySpent,
         transactions: current.transactions,
       ),
-    );
-  }
-
-  Future<StudentAccountModel> _fetch() async {
-    // final user = ref.read(authProvider).user;
-    // final studentId = user?.id ?? 'student_123';
-    // return ref.read(studentAccountRepositoryProvider).fetchAccount(studentId);
-    return const StudentAccountModel(
-      studentId: 'student_123',
-      balance: 124.50,
-      dailyLimit: 200.0,
-      todaySpent: 75.50,
-      transactions: [],
     );
   }
 }

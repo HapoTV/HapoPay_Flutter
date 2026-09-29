@@ -60,7 +60,7 @@ void main() {
       ],
     );
     // Keep autoDispose rewardsProvider alive across async claim gaps.
-    container.listen(rewardsProvider, (_, __) {});
+    container.listen(rewardsProvider, (_, _) {});
   });
 
   tearDown(() => container.dispose());
