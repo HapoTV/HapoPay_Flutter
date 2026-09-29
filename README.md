@@ -1,4 +1,4 @@
-# HapoPay — Flutter Mobile Application
+# HapoPay Flutter Mobile Application
 ### Technical Documentation · v1.0.0 · August 2026
 
 > Cross-platform Flutter app. Production API is Django REST; Supabase is optional. Local UI demos use `USE_MOCK_API=true` and need neither backend.
@@ -48,6 +48,7 @@ HapoPay is a parent-student money management and smart spending platform. The Fl
 | **[Project Roadmap](docs/NEXT_STEPS.md)** | Milestones and build status |
 | **[Production Checklist](PRODUCTION_READINESS.md)** | Store-submission blockers and completed work |
 | **[Production Runbook](docs/PROD_NEXT_STEPS.md)** | Ordered phases for signing, env, assets, legal, QA |
+| **[Production operations](docs/PRODUCTION_OPERATIONS.md)** | Latency, traffic, errors, maintenance, workflows, scale, client performance |
 
 ---
 

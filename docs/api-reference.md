@@ -36,3 +36,5 @@ Declined payments return:
 ```
 
 Other decline messages cover an invalid QR payload, a zero amount, a locked card, and a daily limit.
+
+Production contract additions (idempotency, pay-unknown lookup, pagination) are planned in [`PRODUCTION_OPERATIONS.md`](PRODUCTION_OPERATIONS.md#contract-changes-not-coded-yet). They are **not** in [`openapi.yaml`](openapi.yaml) yet.

@@ -5,6 +5,8 @@ This document tracks remaining work to ship HapoPay v1.0.0 to App Store and Goog
 
 **Actionable runbook:** [`docs/PROD_NEXT_STEPS.md`](docs/PROD_NEXT_STEPS.md)
 
+**Reliability / scale (not store listing):** [`docs/PRODUCTION_OPERATIONS.md`](docs/PRODUCTION_OPERATIONS.md)
+
 ---
 
 ## ✅ Completed

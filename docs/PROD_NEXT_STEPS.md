@@ -1,11 +1,13 @@
-# Production Next Steps — HapoPay Flutter
+# Production Next Steps HapoPay Flutter
 
 Ordered runbook to ship v1.0.0 to App Store and Google Play.
 See also [`PRODUCTION_READINESS.md`](../PRODUCTION_READINESS.md) for the full checklist status.
 
+For latency, traffic, payment safety, Django scale, and client performance (planning, not yet coded), see [`PRODUCTION_OPERATIONS.md`](PRODUCTION_OPERATIONS.md).
+
 ---
 
-## Phase 1 — Identity & signing
+## Phase 1:  Identity & signing
 
 ### Android (wired in app)
 - [ ] `applicationId` / `namespace` → `com.hapopay.hapoPay` (currently `com.example.hapopay`)
@@ -26,7 +28,7 @@ flutter build appbundle --release --dart-define-from-file=.env.prod
 
 ---
 
-## Phase 2 — Production environment
+## Phase 2: Production environment
 
 Create `.env.prod` (never commit):
 
@@ -51,7 +53,7 @@ flutter run --dart-define-from-file=.env.dev
 
 ---
 
-## Phase 3 — Store assets
+## Phase 3: Store assets
 
 - [ ] Branded Android adaptive icons + iOS AppIcon (1024×1024 source)
 - [ ] Splash / launch screens (Android `launch_background.xml`, iOS LaunchScreen)
@@ -61,7 +63,7 @@ flutter run --dart-define-from-file=.env.dev
 
 ---
 
-## Phase 4 — Legal & store listings
+## Phase 4: Legal & store listings
 
 - [ ] Host Privacy Policy URL (required by both stores)
 - [ ] Host Terms of Service
@@ -72,7 +74,7 @@ flutter run --dart-define-from-file=.env.dev
 
 ---
 
-## Phase 5 — Monitoring & release CI
+## Phase 5: Monitoring & release CI
 
 - [ ] Integrate Sentry or Firebase Crashlytics
 - [ ] Add GitHub Actions jobs for release AAB / IPA with `.env.prod`
@@ -80,7 +82,7 @@ flutter run --dart-define-from-file=.env.dev
 
 ---
 
-## Phase 6 — Device QA checklist
+## Phase 6:  Device QA checklist
 
 ```mermaid
 flowchart LR

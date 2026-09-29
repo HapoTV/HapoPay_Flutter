@@ -163,6 +163,8 @@ flowchart LR
   mobile --> ui[Live transaction feed]
 ```
 
+Production constraints for this path (idempotent pay, filtered realtime, no fixture dashboards) are in [`PRODUCTION_OPERATIONS.md`](PRODUCTION_OPERATIONS.md). That document is planning only until the work is implemented.
+
 ## Worked Example
 
 The Student Rewards System is a complete, shipped implementation of this architecture end-to-end — model, repository, provider, and presentation layers, plus routing. See [`rewards_system.md`](rewards_system.md) for a walkthrough of how the pattern above maps to real files in `lib/features/student/`, including load/claim mermaid workflows.

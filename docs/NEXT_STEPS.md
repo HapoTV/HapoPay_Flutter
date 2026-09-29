@@ -33,6 +33,8 @@ This document outlines the roadmap for the HapoPay mobile application, focusing 
 
 **Runbook:** follow [`PROD_NEXT_STEPS.md`](PROD_NEXT_STEPS.md) (ordered phases for signing, env, assets, legal, monitoring, QA).
 
+**Ops / scale plan (docs only until implemented):** [`PRODUCTION_OPERATIONS.md`](PRODUCTION_OPERATIONS.md).
+
 - **Resilience:** Implement Dio interceptors for global error handling, retry logic, and offline data caching via `shared_preferences`.
 - **Security Audit:** Validate token expiration flows, deep-linking security, and secure environment variable handling (`.env.dev` vs `.env.prod` — see [`SETUP_ENV.md`](SETUP_ENV.md)). Mock API is gated by `USE_MOCK_API` (must be `false` in prod).
 - **Launch Prep:** Configure App Store/Play Store metadata, set up deployment flavors, and run final performance profiling on physical devices.
