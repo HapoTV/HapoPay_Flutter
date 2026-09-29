@@ -105,6 +105,7 @@ SUPABASE_URL=
 SUPABASE_ANON_KEY=
 API_BASE_URL=http://10.0.2.2:8000/api
 USE_MOCK_API=false
+SENTRY_DSN=
 ```
 
 | Variable | Notes |
@@ -112,6 +113,7 @@ USE_MOCK_API=false
 | `SUPABASE_URL` | Optional. Empty skips Supabase init |
 | `API_BASE_URL` | `http://10.0.2.2:8000/api` on the Android emulator when talking to host Django |
 | `USE_MOCK_API` | `true` for local UI demos without Django; **must be `false` for release** |
+| `SENTRY_DSN` | Optional. Empty skips Sentry init |
 
 Every `flutter run` / `flutter build` must pass `--dart-define-from-file`. Full reference: **[docs/SETUP_ENV.md](docs/SETUP_ENV.md)**.
 
@@ -131,35 +133,25 @@ dart run build_runner build --delete-conflicting-outputs
 
 ### 6.1 Android signing
 
-**Current tree:** `applicationId` is `com.example.hapopay`. Release builds sign with the **debug** keystore (`android/app/build.gradle.kts`). `android/key.properties` is gitignored and not loaded yet.
-
-When release signing is wired, create `android/key.properties` locally:
-
-```properties
-storePassword=your-android-keystore-password
-keyPassword=your-android-key-password
-keyAlias=upload
-storeFile=keys/upload-keystore.jks
-```
+`applicationId` / `namespace`: `com.hapopay.hapoPay`. Release builds load `android/key.properties` when present (otherwise debug keys + Gradle warning).
 
 ```bash
+./tool/generate_android_keystore.sh
 flutter build appbundle --release --dart-define-from-file=.env.prod
 flutter build apk --release --dart-define-from-file=.env.prod
 ```
 
-Intended store application id (not applied in Gradle yet): `com.hapopay.hapoPay`
+Version bump: `dart run tool/bump_version.dart build|patch|minor|major`. Tag `v*` triggers [`.github/workflows/release.yml`](.github/workflows/release.yml).
 
 ### 6.2 iOS deployment
 
-Requires Apple Developer enrollment, App ID, distribution cert, and provisioning profile in Xcode.
+Requires Apple Developer enrollment, App ID, distribution cert, provisioning profile, and `DEVELOPMENT_TEAM` in Xcode. Bundle ID is already `com.hapopay.hapoPay`.
 
 ```bash
 flutter build ipa --release --dart-define-from-file=.env.prod
 ```
 
-Bundle ID: `com.hapopay.hapoPay`
-
-Store-readiness checklist and phased runbook: **[PRODUCTION_READINESS.md](PRODUCTION_READINESS.md)** · **[docs/PROD_NEXT_STEPS.md](docs/PROD_NEXT_STEPS.md)**.
+Store-readiness checklist and phased runbook: **[PRODUCTION_READINESS.md](PRODUCTION_READINESS.md)** · **[docs/PROD_NEXT_STEPS.md](docs/PROD_NEXT_STEPS.md)**. Legal / listing drafts: **[docs/legal/](docs/legal/)** · **[docs/store/](docs/store/)**.
 
 ---
 
@@ -170,7 +162,7 @@ Store-readiness checklist and phased runbook: **[PRODUCTION_READINESS.md](PRODUC
 | `Connection refused` on Android emulator | `localhost` is the emulator, not the host | Set `API_BASE_URL` to `http://10.0.2.2:8000/api` |
 | Realtime subscription fails | Replication not enabled | Enable tables under Supabase **Database → Replication** |
 | Invalid JWT | Django / Supabase signing mismatch | Align SimpleJWT secret with Supabase JWT secret if sharing tokens |
-| Keystore / signing failure | Release signing not wired; debug keys used | `flutter run` does not need `key.properties`. Store builds still need Gradle + keystore work |
+| Keystore / signing failure | Missing or wrong `key.properties` | Run `./tool/generate_android_keystore.sh`; keep backups offline |
 | Camera viewport blank | Main AndroidManifest has no `CAMERA` yet | iOS already has `NSCameraUsageDescription`; Android still needs the permission |
 | Unexpected mock responses in release | `USE_MOCK_API=true` | Set `USE_MOCK_API=false` in `.env.prod` |
 
@@ -186,14 +178,15 @@ Store-readiness checklist and phased runbook: **[PRODUCTION_READINESS.md](PRODUC
 - Rewards catalog shared across mock, demo, and UI — see [docs/rewards_system.md](docs/rewards_system.md)
 - Networking: Dio interceptors (auth, retry, errors); mock API gated by `USE_MOCK_API`
 - Theme: Material 3 light/dark tokens in `lib/core/theme/`
-- Android: package still `com.example.hapopay`; iOS bundle `com.hapopay.hapoPay`; release signing still debug keys
-- CI: analyze, tests, debug builds
+- Android / iOS identity: `com.hapopay.hapoPay`; release signing via `key.properties`
+- Sentry (optional DSN), release CI (AAB + unsigned iOS), version bump tool
+- CI: analyze, tests, debug builds; release workflow on `v*` tags
 
 ### Upcoming
 
 - Interactive parent budget charts
 - Push notifications (FCM / APNs)
-- Store assets, legal pages, crash reporting, release CI artifacts
+- Store assets; host Privacy / Terms URLs; paste Play Data safety
 - Broader unit / widget / integration coverage
 
 ---

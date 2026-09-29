@@ -1,0 +1,4 @@
+# Keep this directory for local upload keystores (gitignored *.jks).
+# Generate with: ./tool/generate_android_keystore.sh
+*
+!.gitignore

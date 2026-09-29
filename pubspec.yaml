@@ -2,7 +2,6 @@ name: hapopay
 description: HapoPay - Smart Student Spending Platform
 publish_to: "none"
 version: 1.0.0+1
-
 environment:
   sdk: ">=3.10.0 <4.0.0"
 
@@ -47,6 +46,7 @@ dependencies:
   pinput: ^6.0.2
   google_mlkit_face_detection: ^0.15.1
   google_mlkit_barcode_scanning: ^0.16.1
+  sentry_flutter: ^9.0.0
 
 dev_dependencies:
   flutter_test:

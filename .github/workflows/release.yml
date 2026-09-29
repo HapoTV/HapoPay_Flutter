@@ -1,0 +1,129 @@
+name: Release builds
+
+permissions:
+  contents: read
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: 'Reminder only — bump with dart run tool/bump_version.dart before tagging'
+        required: false
+        type: choice
+        options:
+          - none
+          - build
+          - patch
+          - minor
+        default: none
+
+jobs:
+  build-android-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Write .env.prod from secrets
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+        run: |
+          if [ -z "$API_BASE_URL" ]; then
+            echo "Secret API_BASE_URL is required for release builds." >&2
+            exit 1
+          fi
+          {
+            echo "SUPABASE_URL=${SUPABASE_URL}"
+            echo "SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}"
+            echo "API_BASE_URL=${API_BASE_URL}"
+            echo "USE_MOCK_API=false"
+            echo "SENTRY_DSN=${SENTRY_DSN}"
+          } > .env.prod
+
+      - name: Decode Android upload keystore
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          if [ -z "$ANDROID_KEYSTORE_BASE64" ]; then
+            echo "Secret ANDROID_KEYSTORE_BASE64 is required." >&2
+            exit 1
+          fi
+          mkdir -p android/keys
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 -d > android/keys/upload-keystore.jks
+          {
+            echo "storePassword=${ANDROID_KEYSTORE_PASSWORD}"
+            echo "keyPassword=${ANDROID_KEY_PASSWORD}"
+            echo "keyAlias=${ANDROID_KEY_ALIAS:-upload}"
+            echo "storeFile=keys/upload-keystore.jks"
+          } > android/key.properties
+
+      - name: Build release App Bundle
+        run: flutter build appbundle --release --dart-define-from-file=.env.prod
+
+      - name: Upload AAB artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hapopay-release-aab
+          path: build/app/outputs/bundle/release/app-release.aab
+
+  build-ios-release:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Write .env.prod from secrets
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+        run: |
+          if [ -z "$API_BASE_URL" ]; then
+            echo "Secret API_BASE_URL is required for release builds." >&2
+            exit 1
+          fi
+          {
+            echo "SUPABASE_URL=${SUPABASE_URL}"
+            echo "SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}"
+            echo "API_BASE_URL=${API_BASE_URL}"
+            echo "USE_MOCK_API=false"
+            echo "SENTRY_DSN=${SENTRY_DSN}"
+          } > .env.prod
+
+      - name: Build iOS release (no codesign)
+        run: flutter build ios --release --no-codesign --dart-define-from-file=.env.prod
+
+      - name: Upload iOS build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hapopay-release-ios
+          path: build/ios/iphoneos
+
+      # Signed IPA: use .github/workflows/ios-build.yml with DEVELOPMENT_TEAM
+      # and provisioning secrets once Apple Program assets exist.

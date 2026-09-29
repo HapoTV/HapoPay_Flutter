@@ -378,6 +378,8 @@ class SettingsScreen extends ConsumerWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      // Wire url_launcher when Privacy/Terms are hosted —
+                      // see docs/legal/PRIVACY_POLICY_CHECKLIST.md
                       TextLink(label: 'Privacy Policy', onTap: () {}),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),

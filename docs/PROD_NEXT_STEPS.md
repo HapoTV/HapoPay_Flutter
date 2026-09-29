@@ -10,10 +10,10 @@ For latency, traffic, payment safety, Django scale, and client performance (plan
 ## Phase 1:  Identity & signing
 
 ### Android (wired in app)
-- [ ] `applicationId` / `namespace` → `com.hapopay.hapoPay` (currently `com.example.hapopay`)
-- [ ] Release signing loads `android/key.properties` + upload keystore (currently debug keys)
-- [ ] Confirm `android/key.properties` and `android/keys/upload-keystore.jks` exist locally (gitignored)
-- [ ] Verify release AAB:
+- [x] `applicationId` / `namespace` → `com.hapopay.hapoPay`
+- [x] Release signing loads `android/key.properties` + upload keystore (falls back to debug with a Gradle warning if missing)
+- [x] Confirm `android/key.properties` and `android/keys/upload-keystore.jks` exist locally (gitignored) — regenerate with `./tool/generate_android_keystore.sh` (**replace the local-dev passwords before Play upload**)
+- [x] Release signing verified via `./gradlew :app:signingReport` (release → `android/keys/upload-keystore.jks`). Owner: also run AAB once:
 
 ```bash
 flutter build appbundle --release --dart-define-from-file=.env.prod
@@ -21,10 +21,12 @@ flutter build appbundle --release --dart-define-from-file=.env.prod
 
 ### iOS (owner)
 - [ ] Apple Developer Program enrollment
-- [ ] App ID / bundle ID: `com.hapopay.hapoPay` (already set in Xcode project)
+- [x] App ID / bundle ID: `com.hapopay.hapoPay` (already set in Xcode project)
 - [ ] Distribution certificate + provisioning profile
-- [ ] Set `DEVELOPMENT_TEAM` in Xcode
+- [ ] Set `DEVELOPMENT_TEAM` in Xcode (or via CI secrets used by `.github/workflows/ios-build.yml`)
 - [ ] Verify: `flutter build ipa --release --dart-define-from-file=.env.prod`
+
+Owner notes: do **not** use Makefile `ios-archive` (legacy JTC team/bundle). After Team ID is set, archive from Xcode or the signed `ios-build.yml` workflow.
 
 ---
 
@@ -37,12 +39,20 @@ SUPABASE_URL=https://your-prod.supabase.co
 SUPABASE_ANON_KEY=your-prod-anon-key
 API_BASE_URL=https://api.yourdomain.com/api
 USE_MOCK_API=false
+SENTRY_DSN=https://...@o....ingest.sentry.io/...
 ```
 
-- [ ] Fill real prod values
-- [ ] Confirm Django `CORS` / `ALLOWED_HOSTS` include store / web domains
-- [ ] Confirm Supabase realtime replication for prod tables
-- [ ] Local / CI release builds must **not** set `USE_MOCK_API=true`
+- [ ] Fill real prod values in local `.env.prod` (template present; replace placeholders)
+- [ ] Confirm Django `CORS` / `ALLOWED_HOSTS` include store / web domains *(deferred — owner / backend)*
+- [ ] Confirm Supabase realtime replication for prod tables — see checklist below
+- [x] Local / CI release builds must **not** set `USE_MOCK_API=true` (`EnvConfig.assertReleaseSafe` + release workflow force `false`)
+
+### Supabase replication (owner — prod project)
+
+1. Open the **production** Supabase project → **Database → Replication**.
+2. Enable replication for tables the app listens on (at least `public.transactions`).
+3. Confirm RLS so clients cannot read other families’ rows.
+4. Smoke-test: parent live feed updates after a student pay on prod.
 
 Dev / mock UI:
 
@@ -65,20 +75,24 @@ flutter run --dart-define-from-file=.env.dev
 
 ## Phase 4: Legal & store listings
 
-- [ ] Host Privacy Policy URL (required by both stores)
-- [ ] Host Terms of Service
-- [ ] Short + long store descriptions, keywords
-- [ ] Content rating / age rating questionnaires
-- [ ] Play Console Data safety form
-- [ ] App Store Connect: pricing, category, age rating
+- [ ] Host Privacy Policy URL (required by both stores) — content checklist: [`legal/PRIVACY_POLICY_CHECKLIST.md`](legal/PRIVACY_POLICY_CHECKLIST.md)
+- [ ] Host Terms of Service — content checklist: [`legal/TERMS_OF_SERVICE_CHECKLIST.md`](legal/TERMS_OF_SERVICE_CHECKLIST.md)
+- [x] Short + long store descriptions, keywords — [`store/LISTING_COPY.md`](store/LISTING_COPY.md)
+- [x] Content rating / age rating questionnaire **notes** (Play / IARC) — [`store/CONTENT_RATING_NOTES.md`](store/CONTENT_RATING_NOTES.md)
+- [x] Play Console Data safety form **draft** — [`store/PLAY_DATA_SAFETY.md`](store/PLAY_DATA_SAFETY.md) (paste into console)
+- [ ] App Store Connect: pricing, category, age rating *(deferred this pass)*
 
 ---
 
 ## Phase 5: Monitoring & release CI
 
-- [ ] Integrate Sentry or Firebase Crashlytics
-- [ ] Add GitHub Actions jobs for release AAB / IPA with `.env.prod`
-- [ ] Version bump automation (`pubspec.yaml` version + build number)
+- [x] Integrate Sentry (`sentry_flutter`; skip init when `SENTRY_DSN` empty)
+- [x] Add GitHub Actions jobs for release AAB / IPA with `.env.prod` — [`.github/workflows/release.yml`](../.github/workflows/release.yml) (tag `v*` or workflow_dispatch)
+- [x] Version bump automation — `dart run tool/bump_version.dart <build|patch|minor|major>`
+
+Required GitHub secrets for release workflow: `API_BASE_URL`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SENTRY_DSN`, `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_PASSWORD`, `ANDROID_KEY_ALIAS`.
+
+Signed iOS IPA remains on [`ios-build.yml`](../.github/workflows/ios-build.yml) once Apple team assets exist; `release.yml` ships unsigned iOS release artifacts.
 
 ---
 
