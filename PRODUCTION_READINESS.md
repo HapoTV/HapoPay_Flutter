@@ -59,8 +59,8 @@ This document tracks remaining work to ship HapoPay v1.0.0 to App Store and Goog
 - [ ] Verify Django CORS/ALLOWED_HOSTS includes prod domains *(owner / backend)*
 
 ### 5. App Assets
-- [ ] App icons (Android: adaptive icons, iOS: 1024×1024 + all sizes)
-- [ ] Launch/Splash screens (Android: `launch_background.xml`, iOS: `LaunchScreen.storyboard`)
+- [x] App icons (Android: adaptive icons, iOS: 1024×1024 + all sizes) — `dart tool/generate_app_icons.dart`
+- [x] Launch/Splash screens (Android: `launch_background.xml`, iOS: `LaunchScreen.storyboard`) — pending device / Xcode check
 - [ ] Play Store feature graphic (1024×500)
 - [ ] App Store screenshots (iPhone 6.7", 6.5", 5.5", iPad Pro)
 - [ ] Remove `.gitkeep` from `assets/images/` and `assets/icons/`, add real assets
