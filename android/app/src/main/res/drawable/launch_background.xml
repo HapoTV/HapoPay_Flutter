@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Modify this file to customize your launch splash screen -->
+<!-- Launch splash shown until Flutter draws its first frame (pre-Android 12;
+     newer versions use the system splash configured in values-v31). -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@android:color/white" />
+    <item android:drawable="@color/launch_background" />
 
-    <!-- You can insert your own image assets here -->
-    <!-- <item>
-        <bitmap
-            android:gravity="center"
-            android:src="@mipmap/launch_image" />
-    </item> -->
+    <!-- The 88dp bottom inset lifts the logo 44dp above centre, where the
+         Flutter SplashScreen draws it above the wordmark. -->
+    <item
+        android:bottom="88dp"
+        android:drawable="@drawable/launch_logo"
+        android:gravity="center" />
 </layer-list>

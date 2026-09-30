@@ -65,11 +65,22 @@ flutter run --dart-define-from-file=.env.dev
 
 ## Phase 3: Store assets
 
-- [ ] Branded Android adaptive icons + iOS AppIcon (1024×1024 source)
-- [ ] Splash / launch screens (Android `launch_background.xml`, iOS LaunchScreen)
+- [x] Branded Android adaptive icons + iOS AppIcon (1024×1024 source) — masters in `assets/branding/`
+- [x] Splash / launch screens (Android `launch_background.xml` + Android 12 `values-v31`, iOS LaunchScreen) — **not yet checked on a device / in Xcode**
 - [ ] Play Store feature graphic (1024×500)
 - [ ] App Store screenshots (6.7", 6.5", 5.5", iPad Pro)
 - [ ] Replace `.gitkeep` placeholders under `assets/images/` and `assets/icons/`
+
+Icon and launch-logo PNGs are generated from the in-app logo geometry:
+
+```bash
+dart tool/generate_app_icons.dart
+```
+
+Android's adaptive icon and splash logo are hand-written vector drawables
+(`android/app/src/main/res/drawable/ic_launcher_*.xml`, `launch_logo.xml`,
+`launch_splash_icon.xml`). If the logo changes, update those alongside the script.
+Upload `assets/branding/play_store_icon_512.png` as the Play Console hi-res icon.
 
 ---
 
