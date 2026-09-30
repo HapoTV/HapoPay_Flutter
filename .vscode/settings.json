@@ -1,17 +1,7 @@
 {
     "java.compile.nullAnalysis.mode": "automatic",
     "java.configuration.updateBuildConfiguration": "interactive",
-    "dart.flutterSdkPath": "/home/taz/flutter",
     "dart.flutterRunAdditionalArgs": [
         "--dart-define-from-file=.env.dev"
-    ],
-    "terminal.integrated.env.linux": {
-        "JAVA_HOME": "/home/taz/Android/jdk",
-        "ANDROID_HOME": "/home/taz/Android/Sdk",
-        "ANDROID_SDK_ROOT": "/home/taz/Android/Sdk",
-        "ANDROID_USER_HOME": "/home/taz/.config/.android",
-        "ANDROID_AVD_HOME": "/home/taz/.config/.android/avd",
-        "QT_QPA_PLATFORM": "xcb",
-        "PATH": "${workspaceFolder}/tool/bin:/home/taz/Android/jdk/bin:/home/taz/Android/Sdk/cmdline-tools/latest/bin:/home/taz/Android/Sdk/platform-tools:/home/taz/Android/Sdk/emulator:${env:PATH}"
-    }
+    ]
 }
