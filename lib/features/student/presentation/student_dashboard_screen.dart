@@ -113,36 +113,31 @@ class StudentDashboardScreen extends ConsumerWidget {
               ),
               actions: [
                 // Switch to Parent mode pill
-                GestureDetector(
-                  // onTap: () {
-                  //   ref.read(appRoleProvider.notifier).setRole(UserRole.parent);
-                  //   context.go('/parent');
-                  // },
-                  child: Container(
-                    margin: const EdgeInsets.only(right: 8),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppTokens.accent,
-                      borderRadius: AppTokens.borderRadiusFull,
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text('🎒', style: TextStyle(fontSize: 12)),
-                        const Spacing.horizontal(4),
-                        Text(
-                          'Student',
-                          style: GoogleFonts.outfit(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            color: AppTokens.darkBackground,
-                          ),
+
+                Container(
+                  margin: const EdgeInsets.only(right: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppTokens.accent,
+                    borderRadius: AppTokens.borderRadiusFull,
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text('🎒', style: TextStyle(fontSize: 12)),
+                      const Spacing.horizontal(4),
+                      Text(
+                        'Student',
+                        style: GoogleFonts.outfit(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: AppTokens.darkBackground,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
                 Padding(

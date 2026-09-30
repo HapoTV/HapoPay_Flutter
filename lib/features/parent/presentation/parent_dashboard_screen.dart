@@ -79,34 +79,30 @@ class ParentDashboardScreen extends ConsumerWidget {
                 ],
               ),
               actions: [
-                // Switch to Student mode pill
-                GestureDetector(
-                  //onTap: () => context.go('/student'),
-                  child: Container(
-                    margin: const EdgeInsets.only(right: 8),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppTokens.primary,
-                      borderRadius: AppTokens.borderRadiusFull,
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text('👤', style: TextStyle(fontSize: 12)),
-                        const Spacing.horizontal(4),
-                        Text(
-                          'Parent',
-                          style: GoogleFonts.outfit(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
-                          ),
+                Container(
+                  margin: const EdgeInsets.only(right: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppTokens.primary,
+                    borderRadius: AppTokens.borderRadiusFull,
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text('👤', style: TextStyle(fontSize: 12)),
+                      const Spacing.horizontal(4),
+                      Text(
+                        'Parent',
+                        style: GoogleFonts.outfit(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
                 Padding(
