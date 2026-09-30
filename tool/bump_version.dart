@@ -1,4 +1,5 @@
 #!/usr/bin/env dart
+
 // Bump pubspec.yaml version: name version: X.Y.Z+BUILD
 // Usage:
 //   dart run tool/bump_version.dart build   # 1.0.0+1 -> 1.0.0+2

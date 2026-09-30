@@ -45,13 +45,10 @@ Future<void> main() async {
     return;
   }
 
-  await SentryFlutter.init(
-    (options) {
-      options.dsn = EnvConfig.sentryDsn;
-      options.release = 'hapopay@$release';
-      options.environment = kReleaseMode ? 'production' : 'development';
-      options.sendDefaultPii = false;
-    },
-    appRunner: startApp,
-  );
+  await SentryFlutter.init((options) {
+    options.dsn = EnvConfig.sentryDsn;
+    options.release = 'hapopay@$release';
+    options.environment = kReleaseMode ? 'production' : 'development';
+    options.sendDefaultPii = false;
+  }, appRunner: startApp);
 }
