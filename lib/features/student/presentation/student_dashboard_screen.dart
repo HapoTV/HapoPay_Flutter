@@ -85,35 +85,19 @@ class StudentDashboardScreen extends ConsumerWidget {
               automaticallyImplyLeading: false,
               title: Row(
                 children: [
-                  const HapoPayLogo(size: 34),
+                  const HapoPayLogo(height: 28),
                   const Spacing.horizontal(10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Student Hub',
-                        style: GoogleFonts.outfit(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: mutedForeground,
-                        ),
-                      ),
-                      Text(
-                        'HapoPay',
-                        style: GoogleFonts.outfit(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                          color: foregroundColor,
-                        ),
-                      ),
-                    ],
+                  Text(
+                    'Student Hub',
+                    style: GoogleFonts.outfit(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: mutedForeground,
+                    ),
                   ),
                 ],
               ),
               actions: [
-                // Switch to Parent mode pill
-
                 Container(
                   margin: const EdgeInsets.only(right: 8),
                   padding: const EdgeInsets.symmetric(
