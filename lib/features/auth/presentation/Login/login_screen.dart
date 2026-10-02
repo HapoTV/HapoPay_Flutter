@@ -126,8 +126,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   Center(
                     child: Column(
                       children: [
-                        //Logo
-                        const HapoPayLogo(size: 68),
+                        // Logo
+                        const HapoPayLogo(height: 52),
                         const Spacing.vertical(16),
                         Text(
                           'Welcome back',

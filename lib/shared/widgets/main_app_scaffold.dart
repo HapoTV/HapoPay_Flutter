@@ -54,65 +54,45 @@ class MainAppScaffold extends ConsumerWidget {
         scrolledUnderElevation: 0,
         title: Row(
           children: [
-            const HapoPayLogo(size: 34),
+            const HapoPayLogo(height: 28),
             const SizedBox(width: 10),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  isParent ? 'Parent Portal' : 'Student Hub',
-                  style: GoogleFonts.outfit(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    color: mutedForeground,
-                  ),
-                ),
-                Text(
-                  'HapoPay',
-                  style: GoogleFonts.outfit(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w800,
-                    color: foregroundColor,
-                  ),
-                ),
-              ],
+            Text(
+              isParent ? 'Parent Portal' : 'Student Hub',
+              style: GoogleFonts.outfit(
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+                color: mutedForeground,
+              ),
             ),
           ],
         ),
         actions: [
-          // Role switch pill (Parent <-> Student)
-          GestureDetector(
-            onTap: () {
-              ref.read(appRoleProvider.notifier).toggleRole();
-              ref.read(activeTabProvider.notifier).setTab(AppTab.home);
-            },
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              margin: const EdgeInsets.only(right: 8),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-              decoration: BoxDecoration(
-                color: isParent ? AppTokens.primary : AppTokens.accent,
-                borderRadius: AppTokens.borderRadiusFull,
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    isParent ? '👤' : '🎒',
-                    style: const TextStyle(fontSize: 12),
+          // Role pill indicator (Parent / Student)
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            margin: const EdgeInsets.only(right: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            decoration: BoxDecoration(
+              color: isParent ? AppTokens.primary : AppTokens.accent,
+              borderRadius: AppTokens.borderRadiusFull,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  isParent ? '👤' : '🎒',
+                  style: const TextStyle(fontSize: 12),
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  isParent ? 'Parent' : 'Student',
+                  style: GoogleFonts.outfit(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    color: isParent ? Colors.white : AppTokens.darkBackground,
                   ),
-                  const SizedBox(width: 4),
-                  Text(
-                    isParent ? 'Parent' : 'Student',
-                    style: GoogleFonts.outfit(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      color: isParent ? Colors.white : AppTokens.darkBackground,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
           Padding(

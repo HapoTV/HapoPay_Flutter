@@ -52,29 +52,15 @@ class ParentDashboardScreen extends ConsumerWidget {
               automaticallyImplyLeading: false,
               title: Row(
                 children: [
-                  const HapoPayLogo(size: 34),
+                  const HapoPayLogo(height: 28),
                   const Spacing.horizontal(10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Parent Portal',
-                        style: GoogleFonts.outfit(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: mutedForeground,
-                        ),
-                      ),
-                      Text(
-                        'HapoPay',
-                        style: GoogleFonts.outfit(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                          color: foregroundColor,
-                        ),
-                      ),
-                    ],
+                  Text(
+                    'Parent Portal',
+                    style: GoogleFonts.outfit(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: mutedForeground,
+                    ),
                   ),
                 ],
               ),
