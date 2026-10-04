@@ -152,18 +152,8 @@ class _SplashScreenState extends State<SplashScreen>
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const HapoPayLogo(size: 92),
-                        const Spacing.vertical(22),
-                        Text(
-                          'HapoPay',
-                          style: GoogleFonts.outfit(
-                            fontSize: 32,
-                            fontWeight: FontWeight.w800,
-                            color: foregroundColor,
-                            letterSpacing: -0.5,
-                          ),
-                        ),
-                        const Spacing.vertical(6),
+                        const HapoPayLogo(height: 72),
+                        const Spacing.vertical(14),
                         Text(
                           'Smart spending for families',
                           style: GoogleFonts.outfit(

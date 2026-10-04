@@ -189,8 +189,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   Center(
                     child: Column(
                       children: [
-                        //Logo
-                        const HapoPayLogo(size: 56),
+                        // Logo
+                        const HapoPayLogo(height: 48),
                         const Spacing.vertical(12),
                         Text(
                           'Create account',

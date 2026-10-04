@@ -339,17 +339,8 @@ class SettingsScreen extends ConsumerWidget {
               ),
               child: Column(
                 children: [
-                  const HapoPayLogo(size: 48),
-                  const Spacing.vertical(10),
-                  Text(
-                    'HapoPay',
-                    style: GoogleFonts.outfit(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w800,
-                      color: foregroundColor,
-                    ),
-                  ),
-                  const Spacing.vertical(2),
+                  const HapoPayLogo(height: 40),
+                  const Spacing.vertical(8),
                   FutureBuilder<PackageInfo>(
                     future: appVersionCheck(),
                     builder: (context, snapshot) {
